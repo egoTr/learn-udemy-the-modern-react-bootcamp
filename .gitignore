@@ -1,4 +1,5 @@
 NO.TE
-.zip
+*.zip
 .env
+*.env
 node_modules/
