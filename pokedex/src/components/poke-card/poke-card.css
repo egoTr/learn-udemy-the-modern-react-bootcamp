@@ -1,0 +1,18 @@
+poke-card, poke-card * {
+    display:  block;
+}
+
+poke-card {
+    padding: 10px;
+    text-align: center;
+    border: solid 2px #ddd;
+}
+
+poke-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+poke-type {
+    text-transform: uppercase;
+}

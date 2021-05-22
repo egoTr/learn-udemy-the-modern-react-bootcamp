@@ -1,5 +1,14 @@
-NO.TE
-*.zip
+node_modules/
+*-local/
+*-prototype/
+*-ignore*/
+
 .env
 *.env
-node_modules/
+
+NO.TE
+NOTE.*
+*.NOTE
+
+*.zip
+*.rar
