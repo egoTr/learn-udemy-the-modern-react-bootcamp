@@ -17,6 +17,26 @@ body {
     font-family: 'Segoe UI', Arial;
 }
 
-h1, h2, h3, p {
+h1, h2, h3, div, p {
     text-align: center;
+}
+
+.Hello {
+    padding: 10px;
+    border: solid 2px brown;
+}
+
+slot-machine {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    border: dotted 2px blue;
+}
+
+.win {
+    color: green;
+}
+
+.lose {
+    color: red;
 }
