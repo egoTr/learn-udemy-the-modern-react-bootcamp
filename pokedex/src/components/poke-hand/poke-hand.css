@@ -1,0 +1,73 @@
+@keyframes who-win {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes total-power {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+poke-hand {
+    width: 100%;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+poke-hand[win="1"] {
+    border: solid 3px green;
+}
+poke-hand[win="0"] {
+    border: solid 3px red;
+}
+
+poke-hand:first-child {
+    margin-bottom: 20px;
+}
+
+poke-hand[win="1"] phand-title {
+    color: green;
+}
+poke-hand[win="0"] phand-title {
+    color: red;
+}
+
+phand-title, phand-power {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+phand-pokemons {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
+phand-title {
+    height: calc(1.6rem * 1.4);
+    font-size: 1.6rem;
+    font-weight: bold;
+
+    animation-name: who-win;
+    animation-duration: 10s;
+}
+
+phand-power {
+    font-size: 1.3rem;
+    font-weight: bold;
+
+    animation-name: total-power;
+    animation-duration: 10s;
+}
+
+poke-hand poke-card {
+    width: 15%;
+    min-width: 130px;
+    max-width: 300px;
+    margin-top: 10px;
+}
