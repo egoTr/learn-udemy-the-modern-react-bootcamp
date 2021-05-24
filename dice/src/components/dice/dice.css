@@ -1,0 +1,21 @@
+dice {
+    margin: 30px;
+}
+
+dice:first-child[isRolling="true"] {
+    -webkit-animation:spin 0.3s linear infinite;
+    -moz-animation:spin 0.3s linear infinite;
+    animation:spin 0.3s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+dice:last-child[isRolling="true"] {
+    -webkit-animation:spin3d 0.2s linear infinite;
+    -moz-animation:spin3d 0.2s linear infinite;
+    animation:spin3d 0.2s linear infinite;
+}
+@-moz-keyframes spin3d { from {transform: rotateY(45deg);} to {transform: rotateY(225deg);} }
+@-webkit-keyframes spin3d { from {transform: rotateY(45deg);} to {transform: rotateY(225deg);} }
+@keyframes spin3d { from {transform: rotateY(45deg);} to {transform: rotateY(225deg);} }
