@@ -1,0 +1,10 @@
+hangman-keyboard {
+    width: 400px;
+    padding: 20px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
