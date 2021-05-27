@@ -11,7 +11,18 @@ hangman-key {
     cursor: pointer;
 }
 
-hangman-key:hover {
+hangman-key[pressed="false"]:hover {
     opacity: 0.55;
     text-decoration: underline;
+}
+
+hangman-key[pressed="true"] {
+    background-color: #ccc;
+    box-shadow: 0 6px #bbb;
+    cursor: no-drop;
+    opacity: 0.55;
+}
+
+hangman-key[endGame="1"] {
+    cursor: no-drop;
 }

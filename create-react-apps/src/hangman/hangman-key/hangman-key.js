@@ -9,6 +9,7 @@ class HangmanKey extends Component {
         super(props);
         
         this.state = {
+            pressed: false
         } // state
 
         // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
@@ -17,12 +18,27 @@ class HangmanKey extends Component {
     } // constructor
 
     // an EXPERIMENTAL approach to bind 'this'
-    methodName = () => {
+    pressMe = () => {
+        if (this.props.endGame) 
+            return;
+
+        if (this.state.pressed)
+            return;
+
+        this.setState({ pressed: true });
+
+        this.props.clickBehavior(this.props.value);
     } // end of method
 
     render() {
          return (
-            <hangman-key>{this.props.value}</hangman-key>
+            <hangman-key
+                pressed={this.state.pressed}
+                endGame={this.props.endGame}
+                onClick={this.pressMe}>
+                    
+                {this.props.value}
+            </hangman-key>
          ) // return
     } // render
 } // end of class

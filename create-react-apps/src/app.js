@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Hangman from './hangman/hangman/hangman';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  static defaultProps = {
+  } // default properties
+
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+    } // state
+
+    // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
+    // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
+
+  } // constructor
+
+  // an EXPERIMENTAL approach to bind 'this'
+  methodName = () => {
+  } // end of method
+
+  render() {
+     return (
+      <Hangman is="react"/>
+     ) // return
+  } // render
+} // end of class
 
 export default App;
