@@ -1,0 +1,101 @@
+@font-face {
+    font-family: neon;
+    src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/707108/neon.ttf);
+    font-display: swap; /* Prevent the UI from lagging during progress of loading the font */
+  }
+
+:root {
+    --app-font: 'neon', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::after, *::before {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font: 100%/1.4 var(--app-font);
+}
+
+body {
+    background-color: black;
+}
+
+light-outs {
+    width: 100%;
+    padding: 20px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cells-container {
+    box-shadow: -6px 19px 105px 10px rgba(128,0,128,1);
+}
+
+light-outs-title {
+    display: inline-block;
+    font-size: 7rem;
+    color: blue;
+
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+}
+light-outs-title.smaller {
+    font-size: 5rem;
+    color: orange;
+
+    -webkit-animation: glow2 1s ease-in-out infinite alternate;
+    -moz-animation: glow2 1s ease-in-out infinite alternate;
+    animation: glow2 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px blue, 0 0 40px blue, 0 0 50px blue, 0 0 60px blue, 0 0 70px blue;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px blue, 0 0 40px blue, 0 0 50px blue, 0 0 60px blue, 0 0 70px blue, 0 0 80px blue;
+    }
+}
+@keyframes glow2 {
+    from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange, 0 0 60px orange, 0 0 70px orange;
+    }
+    to {
+        text-shadow: 0 0 20px #fff, 0 0 30px orange, 0 0 40px orange, 0 0 50px orange, 0 0 60px orange, 0 0 70px orange, 0 0 80px orange;
+    }
+}
+
+.light-outs-div {
+    display: flex;
+}
+
+cell {
+    width: 5rem;
+    height: 5rem;
+    background-color: black;
+    border: solid 2px white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+cell:hover {
+    opacity: 0.64;
+    box-shadow: 0px -1px 29px 5px rgba(255,255,255, 1);
+}
+cell[state="1"] {
+    /* background-color:yellowgreen; */
+    background-image: url('./neon-on.gif');
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

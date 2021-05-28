@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Hangman from './hangman/hangman/hangman';
+import LightOuts from './light-outs/light-outs';
 
 class App extends Component {
   static defaultProps = {
@@ -22,7 +22,7 @@ class App extends Component {
 
   render() {
      return (
-      <Hangman is="react"/>
+      <LightOuts is="react"/>
      ) // return
   } // render
 } // end of class
