@@ -133,3 +133,9 @@ export default LightOuts;
     # For solving the game, you can visit https://www.dcode.fr/lights-out-solver;
     # For examples with solution, you can visit: https://www.neok12.com/games/lights-out/lights-out.htm;
 */
+
+/*
+    FURTHER WORK:
+    # UI allows to resize the game;
+    # Generate solvable game;
+*/
