@@ -127,3 +127,5 @@ class HangMan extends Component {
 } // end of class
 
 export default HangMan;
+
+// git commit -m "2021 May, 28#2 - challenge(hangman).resolve()"
