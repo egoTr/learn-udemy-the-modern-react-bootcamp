@@ -43,6 +43,13 @@ panelLeft, panelRight {
     align-items: center;
 }
 
+hangman img {
+    border: solid 10px white;
+    border-radius: 20px;
+
+    transition: step 1s ease;
+}
+
 hangman h1 {
     font-size: 250%;
     color:chocolate;
@@ -80,7 +87,7 @@ hangman-teller-wrong-inner {
     height: 100%;
     background-color: red;
 
-    transition: all 1.5s ease;
+    transition: all 1s ease;
 }
 
 hangman-teller-correct {
@@ -100,7 +107,7 @@ hangman-teller-correct-inner {
     height: 100%;
     background-color: green;
 
-    transition: all 1.5s ease;
+    transition: all 1s ease;
 }
 
 hangman-keyboard {
@@ -114,7 +121,7 @@ hangman-keyboard {
 
 }
 
-hangman button {
+.hangman-button {
     height: 6rem;
     width: 6rem;
     font-size: 1.3rem;
@@ -125,7 +132,7 @@ hangman button {
     border-radius: 50%;
     cursor: pointer;
 }
-hangman button:hover {
+.hangman-button:hover {
     text-decoration: underline;
     opacity: 0.55;
 }

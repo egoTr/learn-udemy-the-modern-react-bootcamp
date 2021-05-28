@@ -1,28 +1,30 @@
-hangman-key {
+.hangman-key {
     width: 2.5rem;
     margin: 5px;
     font-size: 1.3rem;
+    font-family: var(--hangman-font);
     line-height: 2.5rem;
     background-color: #00bcd4;
     color: white;
+    border: 0;
     border-radius: 5px;
     box-shadow: 0 6px #0097a7;
     text-align: center;
     cursor: pointer;
 }
 
-hangman-key[pressed="false"]:hover {
+.hangman-key:hover {
     opacity: 0.55;
     text-decoration: underline;
 }
 
-hangman-key[pressed="true"] {
+.hangman-key:disabled {
     background-color: #ccc;
     box-shadow: 0 6px #bbb;
     cursor: no-drop;
     opacity: 0.55;
 }
 
-hangman-key[endGame="1"] {
+.hangman-key[endgame="true"] {
     cursor: no-drop;
 }
