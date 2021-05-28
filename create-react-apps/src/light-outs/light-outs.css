@@ -38,25 +38,28 @@ light-outs {
 }
 
 .cells-container {
-    box-shadow: -6px 19px 105px 10px rgba(128,0,128,1);
+    box-shadow: -6px 19px 105px 10px rgba(128,0,128,0.82);
 }
 
 light-outs-title {
     display: inline-block;
-    font-size: 7rem;
+    font-size: 6.5rem;
     color: blue;
 
-    -webkit-animation: glow 1s ease-in-out infinite alternate;
-    -moz-animation: glow 1s ease-in-out infinite alternate;
     animation: glow 1s ease-in-out infinite alternate;
 }
 light-outs-title.smaller {
-    font-size: 5rem;
+    font-size: 4.5rem;
     color: orange;
 
-    -webkit-animation: glow2 1s ease-in-out infinite alternate;
-    -moz-animation: glow2 1s ease-in-out infinite alternate;
     animation: glow2 1s ease-in-out infinite alternate;
+}
+
+light-outs-title[win="true"] {
+    animation: glow 0.2s ease-in-out infinite alternate;
+}
+light-outs-title.smaller[win="true"] {
+    animation: glow2 0.15s ease-in-out infinite alternate;
 }
 
 @keyframes glow {
@@ -81,21 +84,51 @@ light-outs-title.smaller {
 }
 
 cell {
-    width: 5rem;
-    height: 5rem;
+    width: 4.4rem;
+    height: 4.4rem;
     background-color: black;
     border: solid 2px white;
     border-radius: 10px;
     cursor: pointer;
+    color: white; /* for testing purpose */
 }
 cell:hover {
     opacity: 0.64;
     box-shadow: 0px -1px 29px 5px rgba(255,255,255, 1);
 }
-cell[state="1"] {
-    /* background-color:yellowgreen; */
+cell[status="1"] {
+    /* color: yellow; font-size: 2rem; for testing purpose */
     background-image: url('./neon-on.gif');
     background-size:contain;
     background-repeat: no-repeat;
     background-position: center center;
+
+    animation: lightOn 1s ease-in-out;
+}
+@keyframes lightOn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+light-outs button {
+    width: 6rem;
+    line-height: 6rem;
+    margin-top: 0.5rem;
+    font-size: 4rem;
+    font-family: var(--app-font);
+    background-color: purple;
+    color: white;
+    font-weight: bold;
+
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.73;
+
+    transition: opacity 1.5s ease;
+}
+
+light-outs button:hover {
+    opacity: 1;
+    box-shadow: -6px 10px 64px 5px rgba(128,0,128,1);
 }
