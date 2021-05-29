@@ -106,9 +106,10 @@ class LightOuts extends Component {
 
     render() {
         const cells = this.generateCells();
-        const isWin = this.state.cells.reduce( (andBoolean, cell) => {
+        const isWin = this.state.cells.every( cell => cell < 1 ); // first cell = -1, others must be off
+        /* const isWin = this.state.cells.reduce( (andBoolean, cell) => {
             return andBoolean && (cell < 1) // all lights off
-        }, true); // reduce
+        }, true); // reduce */
 
         return (
             <light-outs is="react">
@@ -131,6 +132,10 @@ export default LightOuts;
     NOTES:
     # Not all the auto-generated game has a solution;
     # For solving the game, you can visit https://www.dcode.fr/lights-out-solver;
+    #### https://www.dcode.fr/api/
+    #### tool=lights-out-solver
+    #### board={"width":4,"height":4,"cells":["1","1","1","0","0","1","0","1","1","1","1","1","0","1","1","1"],"headers":{"row":[1,2,3,4],"col":[1,2,3,4]}}
+    #### nb_states=2
     # For examples with solution, you can visit: https://www.neok12.com/games/lights-out/lights-out.htm;
 */
 
