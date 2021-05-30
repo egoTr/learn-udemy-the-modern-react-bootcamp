@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LightOuts from './light-outs/light-outs';
+import BoxMaker from './box-maker/box-maker';
 
 class App extends Component {
   static defaultProps = {
@@ -22,7 +22,7 @@ class App extends Component {
 
   render() {
      return (
-      <LightOuts is="react"/>
+      <BoxMaker is="react"/>
      ) // return
   } // render
 } // end of class
