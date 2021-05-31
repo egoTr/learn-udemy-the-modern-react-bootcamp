@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BoxMaker from './box-maker/box-maker';
+import ToDo from './todo/todo';
 
 class App extends Component {
   static defaultProps = {
@@ -22,7 +22,7 @@ class App extends Component {
 
   render() {
      return (
-      <BoxMaker is="react"/>
+      <ToDo/>
      ) // return
   } // render
 } // end of class
