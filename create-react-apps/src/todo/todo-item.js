@@ -43,12 +43,15 @@ class TodoItem extends Component {
     updateTask = (event) => {
         event.preventDefault();
 
-        /* // default validation not fired :((
+        // default validation not fired :((
         const form = document.getElementById(`form${this.props.id}`);
         const validationResult = form.checkValidity();
 
-        if (validationResult === false)
-            return; */
+        if (validationResult === false) {
+            this.setState({ task: this.props.task });
+            
+            return;
+        } // if
 
         this.props.updateBehavior(this.props.id, this.state.task);
     } // updateTask
