@@ -8,4 +8,13 @@ function randomColor() {
     return rgb;
 } // randomColor
 
-export { randomColor };
+// https://stackoverflow.com/questions/8584902
+function findClosest(arr, goal) {
+    var closest = arr.reduce( (prev, curr) => {
+        return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+    }, arr[0]);
+
+  return closest;
+} // findClosest
+
+export { randomColor, findClosest };
