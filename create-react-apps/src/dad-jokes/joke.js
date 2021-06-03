@@ -42,7 +42,7 @@ class Joke extends Component {
          return (
              <joke is="react" id={this.props.id}>
                  <joke-buttons>
-                    <button title="Upvote this joke" onClick={this.upVote}>
+                    <button disabled={this.props.transition} title="Upvote this joke" onClick={this.upVote}>
                         <svg className="joke-buttons-svg joke-buttons-svg-up" width="16" height="16" viewBox="0 0 36 36">
                             <path d="M2 26h32L18 10 2 26z"></path>
                         </svg>
@@ -50,7 +50,7 @@ class Joke extends Component {
                     
                     <joke-votes>{this.props.votes}</joke-votes>
 
-                    <button className="joke-buttons-svg joke-buttons-svg-down" title="Downvote this joke"  onClick={this.downVote}>
+                    <button disabled={this.props.transition} className="joke-buttons-svg joke-buttons-svg-down" title="Downvote this joke"  onClick={this.downVote}>
                         <svg width="16" height="16" viewBox="0 0 36 36">
                             <path d="M2 10h32L18 26 2 10z"></path>
                         </svg>

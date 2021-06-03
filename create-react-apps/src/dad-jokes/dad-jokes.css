@@ -46,6 +46,13 @@ dad-jokes {
     border-radius: 10px;
 }
 
+.dad-jokes-icon {
+    font-size: 400%;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: -2px 2px 31px -8px rgba(255,0,102,0.75);
+}
+
 dad-jokes h1 {
     padding: 0 5px;
     color: var(--app-color-primary);
@@ -53,7 +60,7 @@ dad-jokes h1 {
     text-align: center;
 }
 
-.button-load-more-jokes {
+.button-panel-left {
     padding: 10px 20px;
     background-color: transparent;
     border: 0;
@@ -61,7 +68,7 @@ dad-jokes h1 {
     color: var(--app-color-secondary);
     cursor: pointer;
 }
-.button-load-more-jokes:not(:disabled):hover {
+.button-panel-left:not(:disabled):hover {
     background-color: rgba( var(--app-color-secondary-rgb), 0.46);
     border-radius: 10px;
     color: white;
@@ -95,6 +102,11 @@ dad-jokes h1 {
 .panel-right::-webkit-scrollbar {
     display: none;
 }
+
+.panel-right[transition="true"] {
+    animation: onTransition 2s ease;
+}
+@keyframes onTransition { from { opacity: 0; } to { opacity: 1;} }
 
 joke {
     width: 100%;
