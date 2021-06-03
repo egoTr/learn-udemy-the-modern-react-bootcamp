@@ -40,7 +40,7 @@ class Joke extends Component {
          const emotion = CONST_EMOTION_CHARS[closetEmotionFlag_index];
 
          return (
-             <joke is="react">
+             <joke is="react" id={this.props.id}>
                  <joke-buttons>
                     <button title="Upvote this joke" onClick={this.upVote}>
                         <svg className="joke-buttons-svg joke-buttons-svg-up" width="16" height="16" viewBox="0 0 36 36">

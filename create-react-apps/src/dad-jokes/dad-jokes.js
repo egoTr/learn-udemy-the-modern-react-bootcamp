@@ -48,7 +48,8 @@ class DadJokes extends Component {
         
         this.state = {
             isLoading: true,
-            jokes: []
+            jokes: [],
+            scrolledToId: null
         } // state
 
         // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
@@ -76,6 +77,13 @@ class DadJokes extends Component {
 
     async componentDidUpdate(prevProps, prevStata) {
         localStorage.setItem( CONST_JOKES_LOCAL_STORAGE_NAME, JSON.stringify(this.state.jokes) );
+
+        // scroll to newly loaded jokes
+        if (this.state.scrolledToId) {
+            document.getElementById(this.state.scrolledToId).scrollIntoView({ behavior: 'smooth' });
+
+            this.setState({ scrolledToId: null });
+        } // if
     } // componentDidUpdate
 
     // an EXPERIMENTAL approach to bind 'this'
@@ -93,7 +101,7 @@ class DadJokes extends Component {
         const newJokes = await loadJokes(); 
 
         this.setState( currentState => (
-            { isLoading: false, jokes: [...currentState.jokes, ...newJokes] } // push(), pop()... not work for array states
+            { isLoading: false, jokes: [...currentState.jokes, ...newJokes], scrolledToId: newJokes[0].id } // push(), pop()... not work for array states
         )) // setState
     } // loadMoreJokes
 
