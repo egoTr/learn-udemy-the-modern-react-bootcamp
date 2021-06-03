@@ -3,6 +3,8 @@ import './todo.css';
 import TodoForm from './todo-form';
 import TodoItem from './todo-item';
 
+const CONST_TODOS_LOCAL_STORAGE_NAME = "todos.localStorage";
+
 document.title = "React Challenge/> Todo";
 
 class ToDo extends Component {
@@ -28,6 +30,18 @@ class ToDo extends Component {
         // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
 
     } // constructor
+
+    async componentDidMount() {
+        if ( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
+            const tasks = JSON.parse( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) );
+
+            this.setState({ tasks });
+        } // if
+    } // componentDidMount
+
+    async componentDidUpdate(prevProps, prevStata) {
+        localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(this.state.tasks) );
+    } // componentDidUpdate
 
     // an EXPERIMENTAL approach to bind 'this'
     addTodo = (task) => {

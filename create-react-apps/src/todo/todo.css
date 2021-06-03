@@ -21,7 +21,8 @@ html {
 }
 
 body {
-    background-color: rgba(var(--app-color-primary-rgb), 0.05);;
+    background: url('./background.jpg') no-repeat center center;
+    /* background-color: rgba(var(--app-color-primary-rgb), 0.05);; */
 }
 
 todo * {
