@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ToDo from './todo/todo';
-import DadJokes from './dad-jokes/dad-jokes';
+import { BrowserRouter } from 'react-router-dom';
+import ReactColors from './react-colors/react-colors';
 
 class App extends Component {
   static defaultProps = {
@@ -23,7 +23,9 @@ class App extends Component {
 
   render() {
      return (
-      <DadJokes />
+       <BrowserRouter>
+          <ReactColors />
+      </BrowserRouter>
      ) // return
   } // render
 } // end of class
