@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class ColorBox extends Component {
+class NotifyCopy extends Component {
     static defaultProps = {
     } // default properties
 
@@ -21,29 +21,20 @@ class ColorBox extends Component {
     async componentDidUpdate(prevProps, prevStata) {
     } // componentDidUpdate
 
-    copyColor = () => {
-        this.props.copyColorBehavior( this.props.color.toUpperCase() );
-    } // copyColor
-
     // an EXPERIMENTAL approach to bind 'this'
-    viewColor = (event) => {
-        event.stopPropagation();
-
-        this.props.viewColorBehavior(this.props.name);
+    methodName = () => {
     } // end of method
 
     render() {
-        const style = {
-            backgroundColor: this.props.color
-        };
+        const style = { backgroundColor: this.props.color };
         return (
-            <color-box style={style} title={this.props.name.toUpperCase()} onClick={this.copyColor}>
-                <span title="Copy to clipboard" className="color-copy-button">COPY</span>
-                <div className="color-footer">
-                    <span className="color-name">{this.props.name}</span>
-                    <span title="View details" className="color-details" onClick={this.viewColor}>Details</span>
+            <div className="notify-copy-outer" style={style} show={`${this.props.toShowed}`}>
+                <div className="notify-copy-inner">
+                    Copied color&nbsp;
+                    <strong>{this.props.color}</strong>
+                    &nbsp;to clipboard
                 </div>
-            </color-box>
+            </div>
          ) // return
     } // render
 
@@ -54,4 +45,4 @@ class ColorBox extends Component {
     } // componentDidUnMount
 } // end of class
 
-export default ColorBox;
+export default NotifyCopy;

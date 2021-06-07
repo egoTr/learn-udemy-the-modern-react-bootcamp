@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
+import NavBar from './nav';
 import ColorPaletteMini from './color-palette-mini';
-
-document.title = "React Challenge/> React Colors";
 
 class Home extends Component {
     static defaultProps = {
@@ -21,6 +19,7 @@ class Home extends Component {
     } // constructor
 
     async componentDidMount() {
+        document.title = "React Challenge/> React Colors";
     } // componentDidMount
 
     async componentDidUpdate(prevProps, prevStata) {
@@ -28,27 +27,35 @@ class Home extends Component {
 
     // an EXPERIMENTAL approach to bind 'this'
     viewPalette = (palette) => {
+        this.props.transitionBehavior('left-to-right');
+
         this.props.history.push(`/palette/${palette.toLowerCase()}`);
     } // end of method
+
+    createPalette = () => {
+        this.props.transitionBehavior('left-to-right');
+
+        this.props.history.push(`/palette/new`);
+    } // createPalette
 
     render() {
         return (
             <react-colors is="react">
-                <div className="home-header">
-                    <h1>React Colors</h1>
-                    <Link to="/palette/create">Create Palette</Link>
-                </div>
-
+                <NavBar
+                    createPaletteBehavior={this.createPalette}
+                    showCreate={true}
+                />
+                
                 <div className="color-palettes">
-                    
-                    { this.props.palettes.map( (item, i) => 
-                        <ColorPaletteMini
-                            key={i}
-                            data={item}
-                            clickBehavior={this.viewPalette}
-                        />
-                    )}
-                </div>
+                
+                { this.props.palettes.map( (item, i) => 
+                    <ColorPaletteMini
+                        key={i}
+                        data={item}
+                        clickBehavior={this.viewPalette}
+                    />
+                )}
+            </div>
             </react-colors> 
          ) // return
     } // render

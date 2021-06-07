@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import NavBar from './nav';
+
 class CreatePalette extends Component {
     static defaultProps = {
     } // default properties
@@ -16,18 +18,21 @@ class CreatePalette extends Component {
     } // constructor
 
     async componentDidMount() {
+        document.title = "React Colors/> Create Palette";
     } // componentDidMount
 
     async componentDidUpdate(prevProps, prevStata) {
     } // componentDidUpdate
 
-    // an EXPERIMENTAL approach to bind 'this'
-    methodName = () => {
+    goHome = () => {
+        this.props.transitionBehavior('right-to-left');
+
+        this.props.history.push(`/`);
     } // end of method
 
     render() {
         return (
-            <h1>Palette Creator</h1>
+            <NavBar goHomeBehavior={this.goHome}/>
          ) // return
     } // render
 

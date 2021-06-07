@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-document.title = "React Colors/> 404 - Not found";
-
-class Error404NotFound extends Component {
+class Transition extends Component {
     static defaultProps = {
     } // default properties
 
@@ -29,7 +27,9 @@ class Error404NotFound extends Component {
 
     render() {
         return (
-            <h1>Not found</h1>
+            <div className="transition-outer" direction={`${this.props.direction}`}>
+                <div className="transition-inner" direction={`${this.props.direction}`}></div>
+            </div>
          ) // return
     } // render
 
@@ -40,4 +40,4 @@ class Error404NotFound extends Component {
     } // componentDidUnMount
 } // end of class
 
-export default Error404NotFound;
+export default Transition;

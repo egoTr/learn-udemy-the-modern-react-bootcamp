@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Error404NotFound from './error-404-not-found';
+
+import NavBar from './nav';
 
 class ColorDetails extends Component {
     static defaultProps = {
@@ -23,22 +26,31 @@ class ColorDetails extends Component {
 
     async componentDidUpdate(prevProps, prevStata) {
         if (this.state.paletteTitleOriginal)
-            document.title = `React Colors\\${this.state.paletteTitleOriginal}/> ${this.state.colorName.toUpperCase()}`;
+            document.title = `React Colors/${this.state.paletteTitleOriginal}/> ${this.state.colorName.toUpperCase()}`;
     } // componentDidUpdate
 
-    // an EXPERIMENTAL approach to bind 'this'
-    methodName = () => {
+    goHome = () => {
+        this.props.transitionBehavior('right-to-left');
+
+        this.props.history.push(`/`);
     } // end of method
 
     render() {
-        const palette = this.props.palettes.filter(palette => palette.title.toLowerCase() === this.state.paletteTitle)[0];
-        const color = palette.colors.filter(color => color.name.toLowerCase() === this.state.colorName)[0];
+        const palettes = this.props.palettes.filter(palette => palette.title.toLowerCase() === this.state.paletteTitle);
+        if (!palettes.length)
+            return <Error404NotFound/>
+        const palette = palettes[0];
+
+        const colors = palette.colors.filter(color => color.name.toLowerCase() === this.state.colorName);
+        if (!colors.length)
+            return <Error404NotFound/>;
+        const color = colors[0];
 
         if (!this.state.paletteTitleOriginal)
             this.setState({ paletteTitleOriginal: palette.title });
 
         return (
-            <h1>{`${palette.title}\\${color.name}`}</h1>
+            <NavBar showFormat={true} goHomeBehavior={this.goHome}/>
          ) // return
     } // render
 
