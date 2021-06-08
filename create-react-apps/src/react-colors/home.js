@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import NavBar from './nav';
-import ColorPaletteMini from './color-palette-mini';
+import PaletteMini from './palette-mini';
 
 class Home extends Component {
     static defaultProps = {
@@ -38,6 +38,10 @@ class Home extends Component {
         this.props.history.push(`/palette/new`);
     } // createPalette
 
+    removePalette = (paletteId) => {
+        this.props.removePaletteBehavior(paletteId);
+    } // removePalette
+
     render() {
         return (
             <react-colors is="react">
@@ -49,10 +53,11 @@ class Home extends Component {
                 <div className="color-palettes">
                 
                 { this.props.palettes.map( (item, i) => 
-                    <ColorPaletteMini
+                    <PaletteMini
                         key={i}
                         data={item}
                         clickBehavior={this.viewPalette}
+                        removePaletteBehavior={this.removePalette}
                     />
                 )}
             </div>

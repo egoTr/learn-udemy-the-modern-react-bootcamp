@@ -7,7 +7,7 @@ import ColorBox from './color-box';
 import NotifyCopy from './notify-copy';
 import Error404NotFound from './error-404-not-found';
 
-class ColorPalette extends Component {
+class Palette extends Component {
     static defaultProps = {
     } // default properties
 
@@ -66,7 +66,7 @@ class ColorPalette extends Component {
     viewColor = (colorName) => {
         this.props.transitionBehavior('left-to-right');
 
-        this.props.history.push(`/palette/${this.state.paletteTitle.toLowerCase()}/${colorName}`);
+        this.props.history.push(`/palette/${this.state.paletteTitle.toLowerCase()}/${colorName.toLowerCase()}`);
     } // end of method
 
     // an EXPERIMENTAL approach to bind 'this'
@@ -104,7 +104,6 @@ class ColorPalette extends Component {
                         <ColorBox
                             key={i}
                             color={item.hex}
-                            paletteTitle={palette.title}
                             name={item.name}
                             copyColorBehavior={this.copyColor}
                             viewColorBehavior={this.viewColor}
@@ -127,4 +126,4 @@ class ColorPalette extends Component {
     } // componentDidUnMount
 } // end of class
 
-export default ColorPalette;
+export default Palette;

@@ -1,0 +1,125 @@
+.create-palette {
+    background-color: white;
+    height: 100vh;
+
+    display: flex;
+}
+
+.create-palette button {
+    padding: 10px 20px;
+    outline: 0;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.create-palette button:hover {
+    opacity: 0.73;
+}
+
+.panel-left {
+    width: 20%; min-width: 20%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-right: solid 2px #ddd;
+    overflow-y: scroll;
+}
+
+.panel-left * {
+    width: 100%;
+}
+
+.panel-left button {
+    margin-bottom: 10px;
+}
+
+.pnl-palette {
+    margin: 10px 0 20px 0;
+    padding: 20px 0;
+    border-top: solid 2px #ddd;
+    border-bottom: solid 2px #ddd;
+}
+
+.pnl-palette-name {
+    margin: 0 0 5px 0;
+    padding: 10px;
+    outline: 0;
+    border: solid 1px #f8f8f8;
+    border-radius: 5px;
+    font-size: 110%;
+}
+.pnl-palette-name:focus {
+    border-color: var(--app-color-secondary);
+}
+
+.pnl-color-picker {
+    width: 100%;
+    height: 100px;
+}
+
+.pnl-color-name {
+    margin: 10px 0 5px 0;
+    padding: 10px;
+    outline: 0;
+    border: solid 1px #f8f8f8;
+    border-radius: 5px;
+}
+.pnl-color-name:focus {
+    border: solid 1px var(--app-color-primary);
+}
+ 
+.pnl-error {
+    margin-bottom: 10px;
+    color: red;
+    font-size: 80%;
+    font-style: italic;
+}
+
+.panel-right {
+    margin: 0 10px 0 10px;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.pnr-main {
+    margin-top: 10px;
+    flex-grow: 1;
+
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+color-box-create {
+    width: 20%;
+    height: 25%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: move;
+}
+
+.color-create-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.color-create-name {
+    text-transform: uppercase;
+    cursor: default;
+}
+
+.color-remove {
+    cursor: pointer;
+}
+
+color-box-create:hover .color-remove-svg {
+    fill: white;
+    transform: scale(1.5);
+}

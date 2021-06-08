@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import ReactColors from './react-colors/react-colors';
+import ReactColors from './react-colors/_main';
 
 class App extends Component {
   static defaultProps = {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './css/color-box.css';
+
 class ColorBox extends Component {
     static defaultProps = {
     } // default properties
