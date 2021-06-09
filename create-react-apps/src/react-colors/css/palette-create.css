@@ -94,7 +94,7 @@
     flex-wrap: wrap;
 }
 
-color-box-create {
+.color-box-create {
     width: 20%;
     height: 25%;
     
@@ -119,7 +119,7 @@ color-box-create {
     cursor: pointer;
 }
 
-color-box-create:hover .color-remove-svg {
+.color-box-create:hover .color-remove-svg {
     fill: white;
     transform: scale(1.5);
 }

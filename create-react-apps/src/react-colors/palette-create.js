@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Prompt } from 'react-router-dom';
+import arrayMove from 'array-move';
 
 import ColorHelper from '../helpers';
 
 import './css/palette-create.css';
-import ColorBoxCreate from './color-box-create';
+import PaleteCreateContainer from './palette-create-container';
 
 const CONST_MAX_COLORS = 20;
 
@@ -19,6 +21,7 @@ class PaletteCreate extends Component {
         super(props);
         
         this.state = {
+            saved: false,
             title: '',
             invalidPaletteMessage: null,
             colors: [],
@@ -37,6 +40,10 @@ class PaletteCreate extends Component {
     } // componentDidMount
 
     async componentDidUpdate(prevProps, prevStata) {
+        if (this.state.colors.length > 0)
+            window.onbeforeunload = () => true;
+        else
+            window.onbeforeunload = undefined;
     } // componentDidUpdate
 
     // not allow duplicate on
@@ -76,14 +83,17 @@ class PaletteCreate extends Component {
 
     randomColor = () => {
         const color = this.randomColorGenerate();
-        this.addColor({ id: Date.now(), name: color, hex: color });
+        this.addColor({ id: Date.now(), name: color.replace('#', ''), hex: color });
     } // randomColor
 
     pickColor = (event) => {
         if (!event.target.value)
             return;
         
-        const pickedColorName = this.state.pickedColorName.length === 0 ? event.target.value.toUpperCase() : this.state.pickedColorName;
+        const pickedColorName =
+            this.state.pickedColorName.length === 0 ?
+            event.target.value.replace('#', '').toUpperCase() :
+            this.state.pickedColorName;
 
         this.setState({ pickedColor: event.target.value, pickedColorName, invalidColorMessage: null });
     } // pickColor
@@ -111,11 +121,13 @@ class PaletteCreate extends Component {
         if (!valid.status)
             return this.setState({ invalidPaletteMessage: valid.message });
 
-        this.props.createPaletteBehavior({ title: this.state.title, colors: this.state.colors });
+        this.setState({ saved: true }, () => {
+            this.props.createPaletteBehavior({ title: this.state.title, colors: this.state.colors });
 
-        this.props.transitionBehavior('left-to-right');
-        this.props.history.push(`/palette/${this.state.title.toLowerCase()}`);
-    } // createPalette
+            this.props.transitionBehavior('left-to-right');
+            this.props.history.push(`/palette/${this.state.title.toLowerCase()}`);
+        }); // setState
+} // createPalette
 
     clearPalette = () => {
         this.setState({ colors: [] });
@@ -143,71 +155,80 @@ class PaletteCreate extends Component {
         this.props.history.goBack();
     } // goBack
 
+    dragDropEnd = ({oldIndex, newIndex}) => {
+        const colors = arrayMove(this.state.colors, oldIndex, newIndex);
+        
+        this.setState({ colors });
+    };
+
     render() {
         const maxReached = this.state.colors.length >= CONST_MAX_COLORS;
 
         return (
-            <div className="create-palette">
-                <div className="panel-left">
-                    <button className="pnl-back" context="primary" onClick={this.goBack}>BACK</button>
-                    
-                    <div className="pnl-palette">
-                        <form className="pnl-form pnl-form-palette" onSubmit={this.createPalette}>
-                            <input
+                <div className="create-palette">
+                    <Prompt
+                        when={this.state.saved === false && this.state.colors.length > 0}
+                        message={`Reload site?\nChanges you made may not be saved.`}
+                    />
+
+                    <div className="panel-left">
+                        <button className="pnl-back" context="primary" onClick={this.goBack}>BACK</button>
+                        
+                        <div className="pnl-palette">
+                            <form className="pnl-form pnl-form-palette" onSubmit={this.createPalette}>
+                                <input
+                                        type="text"
+                                        required maxLength="64"
+                                        disabled={this.state.colors.length < 1}
+                                        className="pnl-palette-name" placeholder="Palette name"
+                                        name="title"
+                                        value={this.state.title}
+                                        onChange={this.inputChange}
+                                    />
+                                    {this.state.invalidPaletteMessage && <p className="pnl-error">{this.state.invalidPaletteMessage}</p>}
+                                    <button disabled={this.state.colors.length < 1} className="pnrh-save" context="secondary">SAVE</button>
+                            </form>
+
+                            <button onClick={this.clearPalette} className="pnl-clear" context="clear">CLEAR PALETTE</button>
+                        </div>
+
+                        <div className="pnl-color">
+                            <button disabled={maxReached} className="pnl-random" context="secondary" onClick={this.randomColor}>RANDOM COLOR</button>
+                            <p>Pick a color</p>
+                            <input type="color" className="pnl-color-picker" onInput={this.pickColor} onChange={this.pickColor}></input>
+                            
+                            <form className="pnl-form pnl-form-color" onSubmit={this.submitColor}>
+                                <input
                                     type="text"
-                                    required maxLength="64"
-                                    disabled={this.state.colors.length < 1}
-                                    className="pnl-palette-name" placeholder="Palette name"
-                                    name="title"
-                                    value={this.state.title}
+                                    required maxLength="32"
+                                    disabled={!this.state.pickedColor || maxReached}
+                                    className="pnl-color-name" placeholder="COLOR NAME"
+                                    name="pickedColorName"
+                                    value={this.state.pickedColorName}
                                     onChange={this.inputChange}
                                 />
-                                {this.state.invalidPaletteMessage && <p className="pnl-error">{this.state.invalidPaletteMessage}</p>}
-                                <button disabled={this.state.colors.length < 1} className="pnrh-save" context="secondary">SAVE</button>
-                        </form>
-
-                        <button onClick={this.clearPalette} className="pnl-clear" context="clear">CLEAR PALETTE</button>
-                    </div>
-
-                    <div className="pnl-color">
-                        <button disabled={maxReached} className="pnl-random" context="secondary" onClick={this.randomColor}>RANDOM COLOR</button>
-                        <p>Pick a color</p>
-                        <input type="color" className="pnl-color-picker" onInput={this.pickColor} onChange={this.pickColor}></input>
-                        
-                        <form className="pnl-form pnl-form-color" onSubmit={this.submitColor}>
-                            <input
-                                type="text"
-                                required maxLength="32"
-                                disabled={!this.state.pickedColor || maxReached}
-                                className="pnl-color-name" placeholder="COLOR NAME"
-                                name="pickedColorName"
-                                value={this.state.pickedColorName}
-                                onChange={this.inputChange}
-                            />
-                            {this.state.invalidColorMessage && <p className="pnl-error">{this.state.invalidColorMessage}</p>}
-                            <button disabled={!this.state.pickedColor || maxReached} context="primary" style={ {backgroundColor: this.state.pickedColor} }>ADD COLOR</button>
-                        </form>
-                    </div>
-                </div>        
-                
-                <div className="panel-right">
-                    <div className="pnr-main">
-                    { this.state.colors.map( (item, i) =>
-                        <ColorBoxCreate
-                            key={i}
-                            id={item.id}
-                            color={item.hex}
-                            name={item.name}
+                                {this.state.invalidColorMessage && <p className="pnl-error">{this.state.invalidColorMessage}</p>}
+                                <button disabled={!this.state.pickedColor || maxReached} context="primary" style={ {backgroundColor: this.state.pickedColor} }>ADD COLOR</button>
+                            </form>
+                        </div>
+                    </div>        
+                    
+                    <div className="panel-right">
+                        <PaleteCreateContainer
+                            colors={this.state.colors}
                             removeColorBehavior={this.removeColor}
+                            axis="xy"
+                            onSortEnd={this.dragDropEnd}
+                            distance={20}
                         />
-                    )}
+                    </div>
                 </div>
-                </div>
-            </div>
          ) // return
     } // render
 
     componentWillUnmount() {
+        // reset window's default behavior
+        window.onbeforeunload = undefined;
     } // componentWillUnmount
 
     componentDidUnMount() {
