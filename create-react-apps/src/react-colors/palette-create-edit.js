@@ -4,43 +4,31 @@ import arrayMove from 'array-move';
 
 import ColorHelper from '../helpers';
 
-import './css/palette-create.css';
+import './css/palette-create-edit.css';
 import PaleteCreateContainer from './palette-create-container';
+import Error404NotFound from './error-404-not-found';
 
 const CONST_MAX_COLORS = 20;
 
-class PaletteCreate extends Component {
-    static defaultProps = {
-        colors: [
-            { id: 1, name: 'red', hex: '#f0a309' },
-            { id: 2, name: 'purple', hex: '#042089' }
-        ]
-    } // default properties
-
+class PaletteCreateEdit extends Component {
     constructor(props) {
         super(props);
         
+        const palette = this.props.palette;
+
         this.state = {
-            saved: false,
-            title: '',
+            saved: palette ? true : false,
+            title: palette ? palette.title : '',
             invalidPaletteMessage: null,
-            colors: [],
+            colors: palette ? palette.colors : [],
             pickedColor: null,
             pickedColorName: '',
             invalidColorMessage: null
         } // state
-
-        // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
-        // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
-
     } // constructor
 
-    async componentDidMount() {
-        document.title = "React Colors/> Create Palette";
-    } // componentDidMount
-
     async componentDidUpdate(prevProps, prevStata) {
-        if (this.state.colors.length > 0)
+        if (!this.state.saved && this.state.colors.length > 0)
             window.onbeforeunload = () => true;
         else
             window.onbeforeunload = undefined;
@@ -62,11 +50,22 @@ class PaletteCreate extends Component {
 
     addColor = (color) => {
         this.setState( currentState => (
-            { colors: [...currentState.colors, color] } // push(), pop()... not work for array states
+            { saved: false, colors: [...currentState.colors, color] } // push(), pop()... not work for array states
         ), () => {
             //callback
         }) // setState
     } // addColor
+
+    submitColor = (event) => {
+        event.preventDefault();
+
+        const color = { id: Date.now(), name: this.state.pickedColorName, hex: this.state.pickedColor };
+        const validColor = this.checkColorValid(color.name, color.hex);
+        if (!validColor.status)
+            return this.setState({ invalidColorMessage: validColor.message });
+
+        this.addColor(color);
+    } // submitColor
 
     randomColorGenerate = () => {
         let color = '';
@@ -98,36 +97,23 @@ class PaletteCreate extends Component {
         this.setState({ pickedColor: event.target.value, pickedColorName, invalidColorMessage: null });
     } // pickColor
 
-    submitColor = (event) => {
+    createOrSavePalette = (event) => {
         event.preventDefault();
 
-        const color = { id: Date.now(), name: this.state.pickedColorName, hex: this.state.pickedColor };
-        const validColor = this.checkColorValid(color.name, color.hex);
-        if (!validColor.status) {
-            return this.setState({ invalidColorMessage: validColor.message });
-        } // if
-
-        this.setState( currentState => (
-            { colors: [...currentState.colors, color], pickedColorName: '' } // push(), pop()... not work for array states
-        ), () => {
-            //callback
-        }) // setState
-    } // submitColor
-
-    createPalette = (event) => {
-        event.preventDefault();
-
-        const valid = this.props.checkPaletteValidBehavior(this.state.title);
+        const valid = this.props.checkPaletteValidBehavior(this.props.palette ? this.props.palette.id : null, this.state.title);
         if (!valid.status)
             return this.setState({ invalidPaletteMessage: valid.message });
 
         this.setState({ saved: true }, () => {
-            this.props.createPaletteBehavior({ title: this.state.title, colors: this.state.colors });
+            if (this.props.edit)
+                this.props.savePaletteBehavior(this.props.palette.id, this.state.title, this.state.colors);
+            else
+                this.props.createPaletteBehavior({ title: this.state.title, colors: this.state.colors });
 
             this.props.transitionBehavior('left-to-right');
             this.props.history.push(`/palette/${this.state.title.toLowerCase()}`);
         }); // setState
-} // createPalette
+    } // createPalette
 
     clearPalette = () => {
         this.setState({ colors: [] });
@@ -137,7 +123,7 @@ class PaletteCreate extends Component {
         const name = event.target.name;
         this.setState({ [name]: event.target.value }, () => {
             if (name === 'title')
-                this.setState({ invalidPaletteMessage: null });
+                this.setState({ saved: false, invalidPaletteMessage: null });
             else if (name === 'pickedColorName')
                 this.setState({ invalidColorMessage: null });
         });
@@ -146,7 +132,7 @@ class PaletteCreate extends Component {
     removeColor = (colorId) => {
         const newColors = this.state.colors.filter( color => color.id !== colorId );
 
-        this.setState({ colors: newColors });
+        this.setState({ saved: false, colors: newColors });
     } // removeColor
 
     goBack = () => {
@@ -158,10 +144,16 @@ class PaletteCreate extends Component {
     dragDropEnd = ({oldIndex, newIndex}) => {
         const colors = arrayMove(this.state.colors, oldIndex, newIndex);
         
-        this.setState({ colors });
+        this.setState({ saved: false, colors });
     };
 
     render() {
+        const { edit, palette } = this.props;
+        document.title = `React Colors/> ${edit ? 'Edit' : 'Create'} Palette`;
+
+        if (edit && !palette)
+            return <Error404NotFound/>;
+
         const maxReached = this.state.colors.length >= CONST_MAX_COLORS;
 
         return (
@@ -175,7 +167,7 @@ class PaletteCreate extends Component {
                         <button className="pnl-back" context="primary" onClick={this.goBack}>BACK</button>
                         
                         <div className="pnl-palette">
-                            <form className="pnl-form pnl-form-palette" onSubmit={this.createPalette}>
+                            <form className="pnl-form pnl-form-palette" onSubmit={this.createOrSavePalette}>
                                 <input
                                         type="text"
                                         required maxLength="64"
@@ -230,9 +222,6 @@ class PaletteCreate extends Component {
         // reset window's default behavior
         window.onbeforeunload = undefined;
     } // componentWillUnmount
-
-    componentDidUnMount() {
-    } // componentDidUnMount
 } // end of class
 
-export default PaletteCreate;
+export default PaletteCreateEdit;

@@ -8,15 +8,10 @@ import NotifyCopy from './notify-copy';
 import Error404NotFound from './error-404-not-found';
 
 class Palette extends Component {
-    static defaultProps = {
-    } // default properties
-
     constructor(props) {
         super(props);
         
         this.state = {
-            paletteTitle: this.props.match.params.paletteTitle,
-            paletteTitleOriginal: null,
             format: 'HEX',
             copiedColor: null,
             notifyCopy: false
@@ -27,20 +22,8 @@ class Palette extends Component {
                 this.setState({ notifyCopy: false })
             }, 2000);
         }
-        // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
-        // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
-
     } // constructor
 
-    async componentDidMount() {
-        
-    } // componentDidMount
-
-    async componentDidUpdate(prevProps, prevStata) {
-        if (this.state.paletteTitleOriginal)
-            document.title = `React Colors/> ${this.state.paletteTitleOriginal}`;
-    } // componentDidUpdate
-    
     goHome = () => {
         this.props.transitionBehavior('right-to-left');
 
@@ -66,7 +49,7 @@ class Palette extends Component {
     viewColor = (colorName) => {
         this.props.transitionBehavior('left-to-right');
 
-        this.props.history.push(`/palette/${this.state.paletteTitle.toLowerCase()}/${colorName.toLowerCase()}`);
+        this.props.history.push(`/palette/${this.props.palette.title.toLowerCase()}/${colorName.toLowerCase()}`);
     } // end of method
 
     // an EXPERIMENTAL approach to bind 'this'
@@ -77,14 +60,12 @@ class Palette extends Component {
     } // end of method
 
     render() {
-        const palettes = this.props.palettes.filter(palette => palette.title.toLowerCase() === this.state.paletteTitle);
-        if (!palettes.length)
+        const palette = this.props.palette;
+
+        if (!palette)
             return <Error404NotFound/>
 
-        const palette = palettes[0];
-
-        if (!this.state.paletteTitleOriginal)
-            this.setState({ paletteTitleOriginal: palette.title, copiedColor: palette.colors[0].hex });
+        document.title = `React Colors/> ${palette.title}`;
 
         return (
             <color-palette is="react">
@@ -117,13 +98,6 @@ class Palette extends Component {
             </color-palette>
          ) // return
     } // render
-
-    componentWillUnmount() {
-        clearTimeout(this.stopTransition);
-    } // componentWillUnmount
-
-    componentDidUnMount() {
-    } // componentDidUnMount
 } // end of class
 
 export default Palette;

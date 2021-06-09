@@ -1,55 +1,26 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+import CommonPalettes from './data/common-palettes';
+
 import './css/_main.css';
 import Transition from './transition';
 import Home from './home';
 import Error404NotFound from './error-404-not-found';
 import Palette from './palette';
-import PaletteCreate from './palette-create';
+import PaletteCreateEdit from './palette-create-edit';
 import ColorDetails from './color-details';
 
 const CONST_LOCAL_STORAGE_NAME = "react-colors.localStorage";
 
 class App extends Component {
-    static defaultProps = {
-        palettes: [
-            {
-                id: 0,
-                title: 'Flat UI Colors',
-                icon: '🎨',
-                colors: [ 
-                    { id: 0, name: "Turquoise", hex: "#1abc9c" },
-                    { id: 1, name: "Emerald", hex: "#2ecc71" },
-                    { id: 2, name: "PeterRiver", hex: "#3498db" },
-                    { id: 3, name: "Amethyst", hex: "#9b59b6" },
-                    { id: 4, name: "WetAsphalt", hex: "#34495e" },
-                    { id: 5, name: "GreenSea", hex: "#16a085" },
-                    { id: 6, name: "Nephritis", hex: "#27ae60" },
-                    { id: 7, name: "BelizeHole", hex: "#2980b9" },
-                    { id: 8, name: "Wisteria", hex: "#8e44ad" },
-                    { id: 9, name: "MidnightBlue", hex: "#2c3e50" },
-                    { id: 10, name: "SunFlower", hex: "#f1c40f" },
-                    { id: 11, name: "Carrot", hex: "#e67e22" },
-                    { id: 12, name: "Alizarin", hex: "#e74c3c" },
-                    { id: 13, name: "Clouds", hex: "#ecf0f1" },
-                    { id: 14, name: "Concrete", hex: "#95a5a6" },
-                    { id: 15, name: "Orange", hex: "#f39c12" },
-                    { id: 16, name: "Pumpkin", hex: "#d35400" },
-                    { id: 17, name: "Pomegranate", hex: "#c0392b" },
-                    { id: 18, name: "Silver", hex: "#bdc3c7" },
-                    { id: 19, name: "Asbestos", hex: "#7f8c8d" }
-                ]}
-        ]
-    } // default properties
-
     constructor(props) {
         super(props);
         
+        const savedPalettes = localStorage.getItem(CONST_LOCAL_STORAGE_NAME);
         this.state = {
-            transition: '', // left-to-right
-            format: 'hex', // hex, name, rgb
-            palettes: this.props.palettes
+            transition: '', // left-to-right, right-to-left
+            palettes: savedPalettes ? JSON.parse(savedPalettes) : CommonPalettes
         } // state
 
         this.stopTransition = () => {
@@ -57,42 +28,28 @@ class App extends Component {
                 this.setState({ transition: '' });
             }, 1000);
         }
-
-        // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
-        // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
-
     } // constructor
-
-    async componentDidMount() {
-        let palettes;
-
-        if ( localStorage.getItem(CONST_LOCAL_STORAGE_NAME) )
-            palettes = JSON.parse( localStorage.getItem(CONST_LOCAL_STORAGE_NAME) );
-        
-        palettes = (palettes && palettes.length > 0) ? palettes : this.props.palettes; 
-
-        this.setState({ palettes }, () => {
-            localStorage.setItem( CONST_LOCAL_STORAGE_NAME, JSON.stringify(palettes) );
-        });
-    } // componentDidMount
-
-    // not allow duplicate on palette's name
-    checkPaletteValid = (title) => {
-        const inValidPaletteName = this.state.palettes.some( palette => palette.title.toUpperCase() === title.toUpperCase() );
-        if (inValidPaletteName)
-            return { status: false, message: 'Palette name existed.' };
-
-        return { status: true, message: '' }
-    } // checkColorValid
-
-    async componentDidUpdate(prevProps, prevStata) {
-    } // componentDidUpdate
 
     transition = (direction) => {
         this.setState({ transition: direction }, () => {
             this.stopTransition()
         });
     } // transition
+
+    // not allow duplicate on palette's name
+    checkPaletteValid = (id, title) => {
+        let inValidPaletteName;
+        
+        if (id)
+            inValidPaletteName = this.state.palettes.some( palette => palette.title.toUpperCase() === title.toUpperCase() && palette.id !== id);
+        else
+            inValidPaletteName = this.state.palettes.some( palette => palette.title.toUpperCase() === title.toUpperCase());
+        
+        if (inValidPaletteName)
+            return { status: false, message: `Palette name '${title}' not available.` };
+
+        return { status: true, message: '' }
+    } // checkColorValid
 
     createPalette = (palette) => {
         const newPalette = {...palette, id: Date.now(), icon: '🎨'};
@@ -105,6 +62,17 @@ class App extends Component {
         }) // setState
     } // createPalette
 
+    savePalette = (id, title, colors) => {
+        const newPalettes = this.state.palettes.map(palette =>
+            palette.id === id ? {...palette, title, colors} : palette
+        );
+
+        this.setState({ palettes: newPalettes }, () => {
+            //callback
+            localStorage.setItem( CONST_LOCAL_STORAGE_NAME, JSON.stringify(this.state.palettes) );
+        }) // setState
+    } // savePalette
+
     removePalette = (paletteId) => {
         const newPalettes = this.state.palettes.filter( palette => palette.id !== paletteId );
         
@@ -113,10 +81,31 @@ class App extends Component {
         });
     } // removePalette
 
+    getPalette = (paletteTitle) => {
+        const result = this.state.palettes.filter( palette => palette.title.toLowerCase() === paletteTitle.toLowerCase() );
+        if (!result)
+            return null;
+        
+        return result[0];
+    } // getPalette
+
+    getColor = (paletteTitle, colorName) => {
+        const palette = this.getPalette(paletteTitle);
+        if (!palette)
+            return null;
+        
+        const result = palette.colors.filter( color => color.name.toLowerCase() === colorName.toLowerCase() );
+        if (!result)
+            return null;
+        
+        return { palette: palette.title, color: result[0]};
+    } // getColor
+
     render() {
          return (
             <div>
                 <Transition direction={this.state.transition}/>
+
                 <Switch>
                     <Route
                         exact path="/"
@@ -132,11 +121,25 @@ class App extends Component {
                     <Route
                         exact path="/palette/new"
                         render={ (routeProps) => 
-                            <PaletteCreate
+                            <PaletteCreateEdit
                                 {...routeProps}
+                                edit={false}
                                 transitionBehavior={this.transition}
                                 checkPaletteValidBehavior={this.checkPaletteValid}
                                 createPaletteBehavior={this.createPalette}
+                            /> }
+                    />
+
+                    <Route
+                        exact path="/palette/:paletteTitle/edit"
+                        render={ (routeProps) => 
+                            <PaletteCreateEdit
+                                {...routeProps}
+                                edit={true}
+                                palette={this.getPalette(routeProps.match.params.paletteTitle)}
+                                transitionBehavior={this.transition}
+                                checkPaletteValidBehavior={this.checkPaletteValid}
+                                savePaletteBehavior={this.savePalette}
                             /> }
                     />
 
@@ -147,7 +150,7 @@ class App extends Component {
                                 {...routeProps}
                                 transitionBehavior={this.transition}
                                 format={this.state.format}
-                                palettes={this.state.palettes}
+                                palette={this.getPalette(routeProps.match.params.paletteTitle)}
                             />}
                     />      
 
@@ -157,7 +160,7 @@ class App extends Component {
                             <ColorDetails
                                 {...routeProps}
                                 transitionBehavior={this.transition}
-                                palettes={this.state.palettes}
+                                color={this.getColor(routeProps.match.params.paletteTitle, routeProps.match.params.colorName)}
                             />}
                     />
 
@@ -168,13 +171,6 @@ class App extends Component {
             </div>
          ) // return
     } // render
-
-    componentWillUnmount() {
-        clearTimeout(this.stopTransition);
-    } // componentWillUnmount
-
-    componentDidUnMount() {
-    } // componentDidUnMount
 } // end of class
 
 export default App;

@@ -192,16 +192,23 @@ color-palette-mini:hover {
     align-items: center;
 }
 
-.color-palette-mini-remove {
+.color-palette-mini {
+    display: flex;
+}
+.color-palette-mini-edit {
+    fill: var(--app-color-secondary);
+}
+
+.color-palette-mini-remove, .color-palette-mini-edit {
     visibility: hidden;
     width: 48px;
     height: 48px;
     display: flex; justify-content: center; align-items: center;
 }
-color-palette-mini:hover .color-palette-mini-remove {
+color-palette-mini:hover :is(.color-palette-mini-remove, .color-palette-mini-edit) {
     visibility: visible;
 }
-.color-palette-mini-remove:hover {
+.color-palette-mini-remove:hover, .color-palette-mini-edit:hover {
     background-color: #f8f8ff;
     border-radius: 50%;
 }

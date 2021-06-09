@@ -9,27 +9,19 @@ class Home extends Component {
 
     constructor(props) {
         super(props);
-        
-        this.state = {
-        } // state
-
-        // this.methodName2 = this.methodName2.bind(this); // bind 'this' from a class-inside method
-        // this.methodName3 = methodName3.bind(this); // bind 'this' from a class-outside method
-
     } // constructor
-
-    async componentDidMount() {
-        document.title = "React Challenge/> React Colors";
-    } // componentDidMount
-
-    async componentDidUpdate(prevProps, prevStata) {
-    } // componentDidUpdate
 
     // an EXPERIMENTAL approach to bind 'this'
     viewPalette = (palette) => {
         this.props.transitionBehavior('left-to-right');
 
         this.props.history.push(`/palette/${palette.toLowerCase()}`);
+    } // end of method
+
+    editPalette = (palette) => {
+        this.props.transitionBehavior('left-to-right');
+
+        this.props.history.push(`/palette/${palette.toLowerCase()}/edit`);
     } // end of method
 
     createPalette = () => {
@@ -43,6 +35,8 @@ class Home extends Component {
     } // removePalette
 
     render() {
+        document.title = "React Challenge/> React Colors";
+        
         return (
             <react-colors is="react">
                 <NavBar
@@ -56,7 +50,8 @@ class Home extends Component {
                     <PaletteMini
                         key={i}
                         data={item}
-                        clickBehavior={this.viewPalette}
+                        viewPaletteBehavior={this.viewPalette}
+                        editPaletteBehavior={this.editPalette}
                         removePaletteBehavior={this.removePalette}
                     />
                 )}
@@ -64,12 +59,6 @@ class Home extends Component {
             </react-colors> 
          ) // return
     } // render
-
-    componentWillUnmount() {
-    } // componentWillUnmount
-
-    componentDidUnMount() {
-    } // componentDidUnMount
 } // end of class
 
 export default Home;
