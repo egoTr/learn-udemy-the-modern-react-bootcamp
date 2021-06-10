@@ -7,6 +7,22 @@ import ColorBox from './color-box';
 import NotifyCopy from './notify-copy';
 import Error404NotFound from './error-404-not-found';
 
+import styled from 'styled-components';
+const ColorPalette = styled.div`
+    height: 100vh;
+    display: flex;
+    flex-direction: column;`;
+
+const ColorPaletteContainer = styled.div`
+    background-color: white;
+    width: 100%;
+    height: 100vh;
+    padding: 10px;
+    
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;`;
+
 class Palette extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +84,7 @@ class Palette extends Component {
         document.title = `React Colors/> ${palette.title}`;
 
         return (
-            <color-palette is="react">
+            <ColorPalette>
                 <NotifyCopy color={this.state.copiedColor} toShowed={this.state.notifyCopy}/>
 
                 <NavBar
@@ -80,7 +96,7 @@ class Palette extends Component {
                     changeFormatBehavior={this.changeFormat}
                 />
                 
-                <div className="color-palette-container">
+                <ColorPaletteContainer>
                     { palette.colors.map( (item, i) =>
                         <ColorBox
                             key={i}
@@ -90,12 +106,8 @@ class Palette extends Component {
                             viewColorBehavior={this.viewColor}
                         />
                     )}
-                </div>
-
-                <div className="color-palette-footer">
-
-                </div>
-            </color-palette>
+                </ColorPaletteContainer>
+            </ColorPalette>
          ) // return
     } // render
 } // end of class

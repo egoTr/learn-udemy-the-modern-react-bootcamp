@@ -1,12 +1,97 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { Prompt } from 'react-router-dom';
 import arrayMove from 'array-move';
-
 import ColorHelper from '../helpers';
-
-import './css/palette-create-edit.css';
 import PaleteCreateContainer from './palette-create-container';
 import Error404NotFound from './error-404-not-found';
+
+const CreatePalette = styled.div`
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    
+    & button {
+        margin-bottom: 10px;
+        padding: 10px 20px;
+        outline: 0;
+        border: 0;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    & button:hover {
+        opacity: 0.73;
+    }
+`;
+
+const Error = styled.p`
+    margin-bottom: 10px;
+    color: red;
+    font-size: 80%;
+    font-style: italic;`
+;
+
+const PanelLeft = styled.div`
+    width: 20%; min-width: 20%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-right: solid 2px #ddd;
+    overflow-y: scroll;
+
+    & * {
+        width: 100%;
+    }
+`;
+
+const PnlPalette = styled.div`
+    margin: 10px 0 20px 0;
+    padding: 20px 0;
+    border-top: solid 2px #ddd;
+    border-bottom: solid 2px #ddd;
+`;
+
+const PnlPaletteName = styled.input`
+    margin: 0 0 5px 0;
+    padding: 10px;
+    outline: 0;
+    border: solid 1px #f8f8f8;
+    border-radius: 5px;
+    font-size: 110%;
+
+    &:focus {
+        border-color: var(--app-color-primary);
+    }`
+;
+
+const PnlColor = styled.div``;
+
+const PnlColorPicker = styled.input`
+    width: 100%;
+    height: 100px;`
+;
+
+const PnlLeftColorName = styled.input`
+    margin: 10px 0 5px 0;
+    padding: 10px;
+    outline: 0;
+    border: solid 1px #f8f8f8;
+    border-radius: 5px;
+
+    &:focus {
+    border: solid 1px var(--app-color-primary);`
+;
+
+const PanelRight = styled.div`
+    margin: 0 10px 0 10px;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+`;
 
 const CONST_MAX_COLORS = 20;
 
@@ -157,55 +242,55 @@ class PaletteCreateEdit extends Component {
         const maxReached = this.state.colors.length >= CONST_MAX_COLORS;
 
         return (
-                <div className="create-palette">
+                <CreatePalette>
                     <Prompt
                         when={this.state.saved === false && this.state.colors.length > 0}
-                        message={`Reload site?\nChanges you made may not be saved.`}
+                        message={`Leave site?\nChanges you made may not be saved.`}
                     />
 
-                    <div className="panel-left">
+                    <PanelLeft>
                         <button className="pnl-back" context="primary" onClick={this.goBack}>BACK</button>
                         
-                        <div className="pnl-palette">
+                        <PnlPalette>
                             <form className="pnl-form pnl-form-palette" onSubmit={this.createOrSavePalette}>
-                                <input
+                                <PnlPaletteName
                                         type="text"
                                         required maxLength="64"
                                         disabled={this.state.colors.length < 1}
-                                        className="pnl-palette-name" placeholder="Palette name"
+                                        placeholder="Palette name"
                                         name="title"
                                         value={this.state.title}
                                         onChange={this.inputChange}
                                     />
-                                    {this.state.invalidPaletteMessage && <p className="pnl-error">{this.state.invalidPaletteMessage}</p>}
+                                    {this.state.invalidPaletteMessage && <Error>{this.state.invalidPaletteMessage}</Error>}
                                     <button disabled={this.state.colors.length < 1} className="pnrh-save" context="secondary">SAVE</button>
                             </form>
 
                             <button onClick={this.clearPalette} className="pnl-clear" context="clear">CLEAR PALETTE</button>
-                        </div>
+                        </PnlPalette>
 
-                        <div className="pnl-color">
+                        <PnlColor>
                             <button disabled={maxReached} className="pnl-random" context="secondary" onClick={this.randomColor}>RANDOM COLOR</button>
                             <p>Pick a color</p>
-                            <input type="color" className="pnl-color-picker" onInput={this.pickColor} onChange={this.pickColor}></input>
+                            <PnlColorPicker type="color" onInput={this.pickColor} onChange={this.pickColor}></PnlColorPicker>
                             
                             <form className="pnl-form pnl-form-color" onSubmit={this.submitColor}>
-                                <input
+                                <PnlLeftColorName
                                     type="text"
                                     required maxLength="32"
                                     disabled={!this.state.pickedColor || maxReached}
-                                    className="pnl-color-name" placeholder="COLOR NAME"
+                                    placeholder="COLOR NAME"
                                     name="pickedColorName"
                                     value={this.state.pickedColorName}
                                     onChange={this.inputChange}
                                 />
-                                {this.state.invalidColorMessage && <p className="pnl-error">{this.state.invalidColorMessage}</p>}
+                                {this.state.invalidColorMessage && <Error>{this.state.invalidColorMessage}</Error>}
                                 <button disabled={!this.state.pickedColor || maxReached} context="primary" style={ {backgroundColor: this.state.pickedColor} }>ADD COLOR</button>
                             </form>
-                        </div>
-                    </div>        
+                        </PnlColor>
+                    </PanelLeft>        
                     
-                    <div className="panel-right">
+                    <PanelRight>
                         <PaleteCreateContainer
                             colors={this.state.colors}
                             removeColorBehavior={this.removeColor}
@@ -213,8 +298,8 @@ class PaletteCreateEdit extends Component {
                             onSortEnd={this.dragDropEnd}
                             distance={20}
                         />
-                    </div>
-                </div>
+                    </PanelRight>
+                </CreatePalette>
          ) // return
     } // render
 

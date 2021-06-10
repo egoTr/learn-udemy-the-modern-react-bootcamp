@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import CommonPalettes from './data/common-palettes';
 
-import './css/_main.css';
+import './_main.css';
 import Transition from './transition';
 import Home from './home';
 import Error404NotFound from './error-404-not-found';
@@ -26,7 +26,7 @@ class App extends Component {
         this.stopTransition = () => {
             setTimeout(() => {
                 this.setState({ transition: '' });
-            }, 1000);
+            }, 400); // this should be LESS THAN animation's duration
         }
     } // constructor
 

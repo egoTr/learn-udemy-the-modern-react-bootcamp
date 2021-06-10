@@ -1,17 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-document.title = "React Colors/> 404 - Not found";
-
-class Error404NotFound extends Component {
-    constructor(props) {
-        super(props);
-    } // constructor
-
-    render() {
-        return (
-            <h1>Not found</h1>
-         ) // return
-    } // render
+function Error404NotFound() {
+    document.title = "React Colors/> 404 - Not found";
+    return (
+        <h1>Not found</h1>
+        ) // return
 } // end of class
 
 export default Error404NotFound;

@@ -4,13 +4,6 @@ import NavBar from './nav';
 import PaletteMini from './palette-mini';
 
 class Home extends Component {
-    static defaultProps = {
-    } // default properties
-
-    constructor(props) {
-        super(props);
-    } // constructor
-
     // an EXPERIMENTAL approach to bind 'this'
     viewPalette = (palette) => {
         this.props.transitionBehavior('left-to-right');

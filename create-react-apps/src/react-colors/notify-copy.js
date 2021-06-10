@@ -1,22 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class NotifyCopy extends Component {
-    constructor(props) {
-        super(props);
-    } // constructor
+import styled from 'styled-components';
+const NotifyCopyOuter = styled.div`
+    display: ${props => props.show ? 'block' : 'none'};
+    z-index: 3;
+    background-color: ${props => props.color ? props.color: 'white'};
+    position: fixed; top: 0; left: 0;
+    width: 100%;
+    box-shadow: 0px 10px 17px -8px rgba(0,0,0,0.75);
 
-    render() {
-        const style = { backgroundColor: this.props.color };
-        return (
-            <div className="notify-copy-outer" style={style} show={`${this.props.toShowed}`}>
-                <div className="notify-copy-inner">
-                    Copied color&nbsp;
-                    <strong>{this.props.color}</strong>
-                    &nbsp;to clipboard
-                </div>
-            </div>
-         ) // return
-    } // render
+    opacity: ${props => props.show ? '1' : '0'};
+    transition: all 2s ease-in-out;`;
+
+const NotifyCopyInner = styled.div`
+    color: white;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;`;
+
+function NotifyCopy(props) {
+    return (
+        <NotifyCopyOuter color={props.color} show={props.toShowed}>
+            <NotifyCopyInner>
+                Copied color&nbsp;
+                <strong>{props.color}</strong>
+                &nbsp;to clipboard
+            </NotifyCopyInner>
+        </NotifyCopyOuter>
+        ) // return
 } // end of class
 
 export default NotifyCopy;

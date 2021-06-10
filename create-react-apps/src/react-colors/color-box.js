@@ -1,37 +1,80 @@
-import React, { Component } from 'react';
+import React, {memo} from 'react';
+import styled from 'styled-components';
 
-import './css/color-box.css';
+const ColorCopyButton = styled.span`
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
 
-class ColorBox extends Component {
-    constructor(props) {
-        super(props);
-    } // constructor
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    top: 50%;
+    left: 50%;
+    margin: -20px 0 0 -40px; // -20px = -height/2 ; -40px = -width/2 //
 
-    copyColor = () => {
-        this.props.copyColorBehavior( this.props.color.toUpperCase() );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 5px;
+`;
+
+const Box = styled.div`
+    background-color: ${props => props.color};
+    position: relative;
+    --color-box-width: 20%;
+    width: var(--color-box-width);
+    height: 25%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: pointer;
+
+    &:hover ${ColorCopyButton} {
+        visibility: visible;
+    }
+`;
+
+const ColorFooter = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+`;
+
+const ColorName = styled.span`
+    text-transform: uppercase;
+`;
+
+const ColorDetails = styled.span`
+    color: white;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+function ColorBox(props) {
+    function copyColor() {
+        props.copyColorBehavior( props.color.toUpperCase() );
     } // copyColor
 
     // an EXPERIMENTAL approach to bind 'this'
-    viewColor = (event) => {
+    function viewColor(event) {
         event.stopPropagation();
 
-        this.props.viewColorBehavior(this.props.name);
+        props.viewColorBehavior(props.name);
     } // end of method
 
-    render() {
-        const style = {
-            backgroundColor: this.props.color
-        };
-        return (
-            <color-box style={style} title={this.props.name.toUpperCase()} onClick={this.copyColor}>
-                <span title="Copy to clipboard" className="color-copy-button">COPY</span>
-                <div className="color-footer">
-                    <span className="color-name">{this.props.name}</span>
-                    <span title="View details" className="color-details" onClick={this.viewColor}>Details</span>
-                </div>
-            </color-box>
-         ) // return
-    } // render
+    return (
+        <Box color={props.color} title={props.name.toUpperCase()} onClick={copyColor}>
+            <ColorCopyButton title="Copy to clipboard">COPY</ColorCopyButton>
+            <ColorFooter>
+                <ColorName>{props.name}</ColorName>
+                <ColorDetails title="View details" onClick={viewColor}>Details</ColorDetails>
+            </ColorFooter>
+        </Box>
+        ) // return
 } // end of class
 
-export default ColorBox;
+export default memo(ColorBox);

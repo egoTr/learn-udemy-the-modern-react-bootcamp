@@ -1,11 +1,22 @@
 import ColorBoxCreate from './color-box-create';
 import {SortableContainer} from 'react-sortable-hoc';
+import styled from 'styled-components';
+
+const PnrMain = styled.div`
+    margin-top: 10px;
+    padding-bottom: 10px;
+    flex-grow: 1;
+
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;`
+;
 
 const PaleteCreateContainer = SortableContainer(props =>  {
     const { colors, removeColorBehavior } = props;    
 
     return (
-        <div className="pnr-main">
+        <PnrMain>
             { colors.map( (item, i) =>
                 <ColorBoxCreate
                     key={i}
@@ -16,7 +27,7 @@ const PaleteCreateContainer = SortableContainer(props =>  {
                     removeColorBehavior={ () => removeColorBehavior(item.id) }
                 />
             )}
-        </div>
+        </PnrMain>
     ) // return
 }) // end of function
 
