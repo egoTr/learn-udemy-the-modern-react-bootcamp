@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import ReactColors from './react-colors/_main';
+import Todo from './todo-v2/todo';
 
 class App extends Component {
   static defaultProps = {
@@ -23,9 +22,7 @@ class App extends Component {
 
   render() {
      return (
-       <BrowserRouter>
-          <ReactColors />
-      </BrowserRouter>
+       <Todo />
      ) // return
   } // render
 } // end of class

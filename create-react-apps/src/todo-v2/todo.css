@@ -1,0 +1,184 @@
+:root {
+    --app-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --app-color-primary: #ff0066;
+    --app-color-primary-rgb: 255, 0, 102;
+    --app-color-secondar: #3cba54;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::after, *::before {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font: 1rem/1.4 var(--app-font);
+}
+
+body {
+    background: url('./background.jpg') no-repeat center center;
+    background-attachment: fixed;
+    /* background-color: rgba(var(--app-color-primary-rgb), 0.05);; */
+}
+
+todo * {
+    font-family: var(--app-font);
+}
+
+todo {
+    background-color: white;
+    width: max(380px, 30%);
+    margin: 20px auto 0 auto;
+    padding: 20px;
+    border: solid 3px var(--app-color-primary);
+    border-radius: 10px; 
+    
+    display: flex;
+    flex-direction: column;
+
+}
+
+todo h1 {
+    color: var(--app-color-primary);
+}
+
+/* todo-item add --------------------------------------------------------------------------------------------------- START */
+form.outer {
+    width: 100%;
+    margin: 10px 0 10px 0;
+    display: flex;
+}
+
+form.outer input[type="text"] {
+    flex-grow: 1;
+    padding: 0 10px 0 10px;
+    font-size: 1rem;
+    line-height: 250%;
+    outline: 0;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+}
+form.outer input[type="text"]:focus {
+    border-color: var(--app-color-secondar);
+}
+
+form.outer button {
+    margin-left: 5px;
+    padding: 0 10px 0 10px;
+    font-size: 1rem;
+
+    background-color: var(--app-color-secondar);
+    color: white;
+    outline: 0;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+}
+form.outer button:hover {
+    opacity: 0.73;
+}
+/* todo-item add --------------------------------------------------------------------------------------------------- END */
+
+todo hr {
+    margin: 10px 0 10px 0;
+}
+
+/* todo-item display ----------------------------------------------------------------------------------------------- START */
+todo-item {
+    width: 100%;
+    margin-top: 3px;
+    padding: 5px 2px 5px 10px;
+    display: flex;
+    flex-direction: column;
+
+    /* set border for all 4 sides for not growing on hovering  */
+    border-style: solid;
+    border-width: 1px;
+    border-color: white white #ddd white;
+
+    cursor: move;
+}
+todo-item[onedit="true"], todo-item:hover {
+    background-color: #fafafa;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+}
+
+todo-item div {
+    display: flex;
+    align-items: center;
+}
+
+todo-text {
+    flex-grow: 1;
+    cursor: pointer;
+}
+todo-text[done="true"] {
+    color: var(--app-color-primary);
+    text-decoration: line-through;
+}
+
+todo-buttons {
+    display: flex;
+}
+
+todo-buttons button {
+    width: 2rem;
+    height: 2rem;
+    margin: 2px;
+    font-size: 0.8rem;
+    border: solid 1px #ccc;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+}
+todo-buttons button:hover {
+    background-color: #ccc;
+    opacity: 0.73;
+}
+/* todo-item display ----------------------------------------------------------------------------------------------- END */
+
+/* todo-item edit -------------------------------------------------------------------------------------------------- START */
+form.inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+form.inner input[type="text"] {
+    flex-grow: 1;
+    padding: 0 10px 0 10px;
+    font-size: 1rem;
+    line-height: 250%;
+    outline: 0;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+}
+form.inner input[type="text"]:focus {
+    border-color: var(--app-color-secondar);
+}
+form.inner input[type="text"]:invalid {
+    border-color: red;
+}
+
+form.inner button {
+    width: 2rem;
+    height: 2rem;
+    margin: 2px;
+    font-size: 0.8rem;
+    border: solid 1px #ccc;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+form.inner button:hover {
+    background-color: #ccc;
+    opacity: 0.73;
+}
+/* todo-item edit -------------------------------------------------------------------------------------------------- END */

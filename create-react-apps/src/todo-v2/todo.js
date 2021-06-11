@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { closestCenter, DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import './todo.css';
 import TodoForm from './todo-form';
@@ -11,14 +9,6 @@ const CONST_TODOS_LOCAL_STORAGE_NAME = "todos.localStorage";
 document.title = "React Challenge/> Todo - v2";
 
 function ToDo(props) {
-    const [activeId, setActiveId] = useState(null);
-    const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-          coordinateGetter: sortableKeyboardCoordinates,
-        })
-      );
-
     const [initialized, setInit] = useState(false);
     const [onEdit, setOnEdit] = useState(false);
     const [tasks, setTasks] = useState([]);
@@ -107,60 +97,24 @@ function ToDo(props) {
             
             { tasks.length === 0 && <p>No tasks.</p>}
 
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}>
-
-                     <SortableContext 
-                        items={null}
-                        strategy={verticalListSortingStrategy}
-                    >
-
-                    <div>
-                        { tasks.map( (item, i) =>
-                            <TodoItem
-                                key={i}
-                                id={i}
-                                task={item.task}
-                                /*done={item.done}
-                                onEdit={item.onEdit}
-                                ref={item.onEdit ? refTodoItem : null}
-                                validated={false}
-                                toogleBehavior={toogleTaskDone}
-                                removeBehavior={removeTaskById}
-                                editBehavior={editTaskById}
-                                editCancelBehavior={editCancelTaskById}
-                                updateBehavior={updateTaskById}*/
-                            />
-                        )}
-                    </div>
-                </SortableContext>
-            </DndContext>
+            { tasks.map( (item, i) =>
+                <TodoItem
+                    key={i}
+                    id={item.id}
+                    task={item.task}
+                    done={item.done}
+                    onEdit={item.onEdit}
+                    ref={item.onEdit ? refTodoItem : null}
+                    validated={false}
+                    toogleBehavior={toogleTaskDone}
+                    removeBehavior={removeTaskById}
+                    editBehavior={editTaskById}
+                    editCancelBehavior={editCancelTaskById}
+                    updateBehavior={updateTaskById}
+                />
+            )}
         </todo>
     ) // return
-
-    function handleDragStart(event) { console.log('handleDragStart');
-        const {active} = event;
-        
-        setActiveId(active.id);
-      } // handleDragStart
-      
-      function handleDragEnd(event) { console.log('xxx');
-        const {active, over} = event;
-        
-        if (active.id !== over.id) {
-          setTasks((items) => {
-            const oldIndex = items.indexOf(active.id);
-            const newIndex = items.indexOf(over.id);
-            
-            return arrayMove(items, oldIndex, newIndex);
-          });
-        }
-        
-        setActiveId(null);
-      } // handleDragEnd
 } // end of function
 
 export default ToDo;

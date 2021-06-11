@@ -82,7 +82,7 @@ const PnlLeftColorName = styled.input`
     border-radius: 5px;
 
     &:focus {
-    border: solid 1px var(--app-color-primary);`
+    border: solid 1px var(--app-color-primary);}`
 ;
 
 const PanelRight = styled.div`
