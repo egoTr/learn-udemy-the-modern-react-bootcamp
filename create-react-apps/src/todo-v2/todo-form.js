@@ -11,9 +11,6 @@ const TodoForm = forwardRef( (props, ref) =>  {
 
         // reset state
         setTask('');
-
-        // focus at input
-        ref.current.focus();
     } // end of method
 
     return (
@@ -21,7 +18,7 @@ const TodoForm = forwardRef( (props, ref) =>  {
             <input
                 ref={ref}
                 type="text" name="task"
-                required autoFocus
+                required
                 minLength="2" maxLength="128"
                 placeholder="Task"
                 value={task}

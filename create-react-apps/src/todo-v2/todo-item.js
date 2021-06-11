@@ -1,6 +1,20 @@
 import React, { memo, useState } from 'react';
+import {useSortable} from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
-const TodoItem = React.forwardRef( (props, ref) => {  
+function TodoItem (props) {  
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+      } = useSortable({id: props.id}); console.log(props.id);
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+      };
+
     const { id, onEdit, done, task, toogleBehavior, editBehavior, editCancelBehavior, updateBehavior, removeBehavior } = props;
     
     const [taskMe, setTask] = useState(task);
@@ -28,13 +42,20 @@ const TodoItem = React.forwardRef( (props, ref) => {
     } // updateTask
 
     return (
-    <todo-item onedit={`${onEdit}`}>
+    <div className="todo-item"
+        onedit={`${onEdit}`}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+    >
+
         {!onEdit && 
         <div>
             <todo-text
                 title={done ? "Click to set this task UNDONE" : "Click to set this task DONE"}
                 done={`${done}`}
-                onClick={ () => toogleBehavior(id) }
+                /*onClick={() => toogleBehavior(id)} */
                 >
                 {taskMe}
             </todo-text>
@@ -48,7 +69,7 @@ const TodoItem = React.forwardRef( (props, ref) => {
         {onEdit && 
         <form id={`form${id}`} className="inner" onSubmit={updateTask}>
             <input
-                ref={ref}
+                /* ref={ref} */
                 name="task"
                 type="text"
                 required minLength="2" maxLength="128"
@@ -61,8 +82,8 @@ const TodoItem = React.forwardRef( (props, ref) => {
             </todo-buttons-form>
         </form>
         }
-    </todo-item>
+    </div>
     ) // return
-}) // end of function
+} // end of function
 
 export default memo(TodoItem);

@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { closestCenter, DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+
 import './todo.css';
 import TodoForm from './todo-form';
 import TodoItem from './todo-item';
@@ -7,116 +10,157 @@ const CONST_TODOS_LOCAL_STORAGE_NAME = "todos.localStorage";
 
 document.title = "React Challenge/> Todo - v2";
 
-class ToDo extends Component {
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            onEdit: false,
-            tasks: []
-        } // state
+function ToDo(props) {
+    const [activeId, setActiveId] = useState(null);
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+          coordinateGetter: sortableKeyboardCoordinates,
+        })
+      );
 
-        this.refForm = React.createRef();
-        this.refTodoItem = React.createRef();
-    } // constructor
+    const [initialized, setInit] = useState(false);
+    const [onEdit, setOnEdit] = useState(false);
+    const [tasks, setTasks] = useState([]);
 
-    async componentDidMount() {
-        if ( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
+    const refForm = useRef();
+    const refTodoItem = useRef();
+
+    useEffect( () => {
+        if ( !initialized && localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
             const tasks = JSON.parse( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) );
 
-            this.setState({ tasks });
+            setInit(true);
+            setTasks(tasks);
         } // if
-    } // componentDidMount
+    }, [initialized]);
 
-    async componentDidUpdate(prevProps, prevStata) {
-        localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(this.state.tasks) );
-    } // componentDidUpdate
+    useEffect( () => {
+        if (initialized)
+            localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(tasks) );
+    }, [initialized, tasks]);
 
-    // an EXPERIMENTAL approach to bind 'this'
-    addTodo = (task) => {
+    useEffect( () => {
+        if (onEdit)
+            refTodoItem.current.focus();
+        else
+            refForm.current.focus();
+    }, [tasks, onEdit]);
+
+    function addTodo(task) {
         const newTask = {task, id: Date.now(), done: false, onEdit: false};
 
-        this.setState( currentState => (
-            { tasks: [...currentState.tasks, newTask] } // push(), pop()... not work for array states
-        )) // setState
+        setTasks([...tasks, newTask]);
     } // end of method
 
-    toogleTaskDone = (taskId) => {
-        const newTasks = this.state.tasks.map( task => (
+    function toogleTaskDone(taskId) {
+        const newTasks = tasks.map( task => (
             task.id === taskId ? {...task, done: !task.done} : task
         ));
 
-        this.setState({ tasks: newTasks });
+        setTasks(newTasks);
     } // removeTaskById
 
-    removeTaskById = (taskId) => {
-        if (this.state.onEdit)
+    function removeTaskById(taskId)  {
+        if (onEdit)
             return;
 
-        this.setState( currentState => (
-            { tasks: currentState.tasks.filter(task => task.id !== taskId) } // push(), pop()... not work for array states
-        ), this.refForm.current.focus() ) // setState
+        setTasks( tasks.filter(task => task.id !== taskId) );
     } // removeTaskById
 
-    editTaskById = (taskId) => {
-        if (this.state.onEdit)
+    function editTaskById(taskId) {
+        if (onEdit)
             return;
         
-        const newTasks = this.state.tasks.map( task => (
+        const newTasks = tasks.map( task => (
             task.id === taskId ? {...task, onEdit: true} : task
         ));
 
-        this.setState({ onEdit: true, tasks: newTasks }, () => {
-            if (this.refTodoItem.current)
-                this.refTodoItem.current.focus();
-        });
+        setOnEdit(true);
+        setTasks(newTasks);
     } // editTaskById
 
-    editCancelTaskById = (taskId) => {
-        const newTasks = this.state.tasks.map( task => (
+    function editCancelTaskById(taskId)  {
+        const newTasks = tasks.map( task => (
             task.id === taskId ? {...task, onEdit: false} : task
         ));
 
-        this.setState({ onEdit: false, tasks: newTasks }, this.refForm.current.focus());
+        setOnEdit(false);
+        setTasks(newTasks);
     } // editCancelTaskById
 
-    updateTaskById = (taskId, taskText) => {
-        const newTasks = this.state.tasks.map( task => (
+    function updateTaskById(taskId, taskText) {
+        const newTasks = tasks.map( task => (
             task.id === taskId ? {...task, task: taskText, onEdit: false} : task
         ));
 
-        this.setState({ onEdit: false, tasks: newTasks }, this.refForm.current.focus());
+        setOnEdit(false);
+        setTasks(newTasks);
     } // updateTaskById
 
-    render() {
-         return (
-            <todo is="react">
-                <h1>TODOs</h1>
-                <TodoForm ref={this.refForm} submitBehavior={this.addTodo}/>
+    return (
+        <todo is="react">
+            <h1>TODOs</h1>
+            <TodoForm ref={refForm} submitBehavior={addTodo}/>
 
-                <hr/>
-                
-                { this.state.tasks.length === 0 && <p>No tasks.</p>}
-                
-                { this.state.tasks.map( (item, i) =>
-                    <TodoItem
-                        key={i}
-                        id={item.id}
-                        task={item.task}
-                        done={item.done}
-                        onEdit={item.onEdit}
-                        ref={item.onEdit ? this.refTodoItem : null}
-                        validated={false}
-                        toogleBehavior={this.toogleTaskDone}
-                        removeBehavior={this.removeTaskById}
-                        editBehavior={this.editTaskById}
-                        editCancelBehavior={this.editCancelTaskById}
-                        updateBehavior={this.updateTaskById}
-                    />
-                )}
-            </todo>
-         ) // return
-    } // render
-} // end of class
+            <hr/>
+            
+            { tasks.length === 0 && <p>No tasks.</p>}
+
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}>
+
+                     <SortableContext 
+                        items={null}
+                        strategy={verticalListSortingStrategy}
+                    >
+
+                    <div>
+                        { tasks.map( (item, i) =>
+                            <TodoItem
+                                key={i}
+                                id={i}
+                                task={item.task}
+                                /*done={item.done}
+                                onEdit={item.onEdit}
+                                ref={item.onEdit ? refTodoItem : null}
+                                validated={false}
+                                toogleBehavior={toogleTaskDone}
+                                removeBehavior={removeTaskById}
+                                editBehavior={editTaskById}
+                                editCancelBehavior={editCancelTaskById}
+                                updateBehavior={updateTaskById}*/
+                            />
+                        )}
+                    </div>
+                </SortableContext>
+            </DndContext>
+        </todo>
+    ) // return
+
+    function handleDragStart(event) { console.log('handleDragStart');
+        const {active} = event;
+        
+        setActiveId(active.id);
+      } // handleDragStart
+      
+      function handleDragEnd(event) { console.log('xxx');
+        const {active, over} = event;
+        
+        if (active.id !== over.id) {
+          setTasks((items) => {
+            const oldIndex = items.indexOf(active.id);
+            const newIndex = items.indexOf(over.id);
+            
+            return arrayMove(items, oldIndex, newIndex);
+          });
+        }
+        
+        setActiveId(null);
+      } // handleDragEnd
+} // end of function
 
 export default ToDo;
