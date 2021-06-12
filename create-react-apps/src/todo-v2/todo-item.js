@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 
-/* const TodoItem = React.forwardRef( (props, ref) => {   */
 const TodoItem = SortableElement( (props) => {  
     const { id, onEdit, done, task, toogleBehavior, editBehavior, editCancelBehavior, updateBehavior, removeBehavior } = props;
     
     const [taskThis, setTask] = useState(task);
+    const refInput = useRef();
 
     // this really shit :(((
     useEffect( () => {
         setTask(props.task);    
     }, [props.id, props.task])
     
+    useEffect( () => {
+        if (props.onEdit)
+            refInput.current.focus();
+    }, [props.onEdit])
+
     function editTaskCancel(event) {
         event.preventDefault();
         
@@ -55,7 +60,7 @@ const TodoItem = SortableElement( (props) => {
             {onEdit && 
             <form id={`form${id}`} className="inner" onSubmit={updateTask}>
                 <input
-                    /* ref={ref} */
+                    ref={refInput}
                     name="task"
                     type="text"
                     required minLength="2" maxLength="128"

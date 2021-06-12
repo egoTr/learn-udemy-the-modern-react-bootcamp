@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import arrayMove from 'array-move';
 
 import './todo.css';
@@ -15,9 +15,6 @@ function ToDo() {
     const [onEdit, setOnEdit] = useState(false);
     const [tasks, setTasks] = useState([]);
 
-    const refForm = useRef();
-    /* const refTodoItem = useRef(); */
-
     useEffect( () => {
         if ( !initialized && localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
             const tasks = JSON.parse( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) );
@@ -31,13 +28,6 @@ function ToDo() {
         if (initialized)
             localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(tasks) );
     }, [initialized, tasks]);
-
-/*     useEffect( () => {
-        if (onEdit)
-            refTodoItem.current.focus();
-        else
-            refForm.current.focus();
-    }, [tasks, onEdit]); */
 
     function addTodo(task) {
         const newTask = {task, id: Date.now(), done: false, onEdit: false};
@@ -96,7 +86,7 @@ function ToDo() {
     return (
         <todo is="react">
             <h1>TODOs</h1>
-            <TodoForm ref={refForm} submitBehavior={addTodo}/>
+            <TodoForm submitBehavior={addTodo}/>
 
             <hr/>
             
@@ -116,7 +106,6 @@ function ToDo() {
                         task={item.task}
                         done={item.done}
                         onEdit={item.onEdit}
-                        /* ref={item.onEdit ? refTodoItem : null} */
                         validated={false}
                         toogleBehavior={toogleTaskDone}
                         removeBehavior={removeTaskById}
