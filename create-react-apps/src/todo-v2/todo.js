@@ -99,10 +99,10 @@ function ToDo() {
 
                 { tasks.map( (item, i) =>
                     <TodoItem
-                        key={i}
+                        key={item.id}       /* For re-rendering the children :(((( */
                         id={item.id}
-                        index={i}           /* /w react-sortable-hoc */
-                        disabled={onEdit}   /* /w react-sortable-hoc */
+                        index={i}           /* w/ react-sortable-hoc */
+                        disabled={onEdit}   /* w/ react-sortable-hoc */
                         task={item.task}
                         done={item.done}
                         onEdit={item.onEdit}

@@ -6,11 +6,6 @@ const TodoItem = SortableElement( (props) => {
     
     const [taskThis, setTask] = useState(task);
     const refInput = useRef();
-
-    // this really shit :(((
-    useEffect( () => {
-        setTask(props.task);    
-    }, [props.id, props.task])
     
     useEffect( () => {
         if (props.onEdit)
