@@ -90,6 +90,7 @@ todo hr {
 
 /* todo-item display ----------------------------------------------------------------------------------------------- START */
 todo-item {
+    position: relative; /* for handling drag_indicator.svg */
     width: 100%;
     margin-top: 3px;
     padding: 5px 2px 5px 10px;
@@ -107,6 +108,18 @@ todo-item[onedit="true"], todo-item:hover {
     background-color: #fafafa;
     border: solid 1px #ddd;
     border-radius: 5px;
+}
+
+todo-item[onedit="false"]:hover::before {
+    display: block;
+    position: absolute; top: calc(50% - 12px); /* 12px = height/2 */
+    left: calc(-10px - 12px); /* -10px = parent's paddingLeft     */
+    background-size: 24px 24px;
+    height: 24px;
+    width: 24px;
+
+    content: ' ';
+    background: url('./drag_indicator.svg');/*  no-repeat center center; */
 }
 
 todo-item div {

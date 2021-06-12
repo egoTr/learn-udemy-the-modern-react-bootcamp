@@ -1,7 +1,8 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useRef } from 'react';
 
 const TodoForm = forwardRef( (props, ref) =>  {
     const [task, setTask] = useState('');
+    const refInput = useRef();
 
     // an EXPERIMENTAL approach to bind 'this'
     function addNewTask(event) {
@@ -11,14 +12,18 @@ const TodoForm = forwardRef( (props, ref) =>  {
 
         // reset state
         setTask('');
+
+        // focus the input
+        refInput.current.focus();
     } // end of method
 
     return (
         <form className="outer" onSubmit={addNewTask}>
             <input
-                ref={ref}
+                ref={refInput}
                 type="text" name="task"
                 required
+                autoFocus
                 minLength="2" maxLength="128"
                 placeholder="Task"
                 value={task}

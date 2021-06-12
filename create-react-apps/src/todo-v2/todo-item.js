@@ -1,10 +1,17 @@
-import React, { memo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { SortableElement } from 'react-sortable-hoc';
 
-const TodoItem = React.forwardRef( (props, ref) => {  
+/* const TodoItem = React.forwardRef( (props, ref) => {   */
+const TodoItem = SortableElement( (props) => {  
     const { id, onEdit, done, task, toogleBehavior, editBehavior, editCancelBehavior, updateBehavior, removeBehavior } = props;
     
-    const [taskMe, setTask] = useState(task);
+    const [taskThis, setTask] = useState(task);
 
+    // this really shit :(((
+    useEffect( () => {
+        setTask(props.task);    
+    }, [props.id, props.task])
+    
     function editTaskCancel(event) {
         event.preventDefault();
         
@@ -24,11 +31,11 @@ const TodoItem = React.forwardRef( (props, ref) => {
             return;
         } // if
 
-        updateBehavior(id, taskMe);
+        updateBehavior(id, taskThis);
     } // updateTask
 
     return (
-        <todo-item onedit={`${onEdit}`}>
+        <todo-item onedit={`${onEdit}`} title="Drag-drop to re-order">
             {!onEdit && 
             <div>
                 <todo-text
@@ -36,7 +43,7 @@ const TodoItem = React.forwardRef( (props, ref) => {
                     done={`${done}`}
                     onClick={() => toogleBehavior(id)}
                     >
-                    {taskMe}
+                    {taskThis}
                 </todo-text>
                 <todo-buttons>
                     <button title="Edit" onClick={ () => editBehavior(id) }>📝</button>
@@ -48,11 +55,11 @@ const TodoItem = React.forwardRef( (props, ref) => {
             {onEdit && 
             <form id={`form${id}`} className="inner" onSubmit={updateTask}>
                 <input
-                    ref={ref}
+                    /* ref={ref} */
                     name="task"
                     type="text"
                     required minLength="2" maxLength="128"
-                    value={taskMe}
+                    value={taskThis}
                     onChange={ (event) => setTask(event.target.value) }
                 />
                 <todo-buttons-form>
@@ -65,4 +72,4 @@ const TodoItem = React.forwardRef( (props, ref) => {
     ) // return
 }) // end of function
 
-export default memo( TodoItem);
+export default TodoItem;

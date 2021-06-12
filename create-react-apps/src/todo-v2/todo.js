@@ -1,28 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
+import arrayMove from 'array-move';
 
 import './todo.css';
 import TodoForm from './todo-form';
+import TodoList from './todo-list';
 import TodoItem from './todo-item';
 
 const CONST_TODOS_LOCAL_STORAGE_NAME = "todos.localStorage";
 
 document.title = "React Challenge/> Todo - v2";
 
-function ToDo(props) {
+function ToDo() {
     const [initialized, setInit] = useState(false);
     const [onEdit, setOnEdit] = useState(false);
     const [tasks, setTasks] = useState([]);
 
     const refForm = useRef();
-    const refTodoItem = useRef();
+    /* const refTodoItem = useRef(); */
 
     useEffect( () => {
         if ( !initialized && localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
             const tasks = JSON.parse( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) );
 
-            setInit(true);
             setTasks(tasks);
         } // if
+        setInit(true);
     }, [initialized]);
 
     useEffect( () => {
@@ -30,12 +32,12 @@ function ToDo(props) {
             localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(tasks) );
     }, [initialized, tasks]);
 
-    useEffect( () => {
+/*     useEffect( () => {
         if (onEdit)
             refTodoItem.current.focus();
         else
             refForm.current.focus();
-    }, [tasks, onEdit]);
+    }, [tasks, onEdit]); */
 
     function addTodo(task) {
         const newTask = {task, id: Date.now(), done: false, onEdit: false};
@@ -44,6 +46,9 @@ function ToDo(props) {
     } // end of method
 
     function toogleTaskDone(taskId) {
+        if (onEdit)
+            return;
+        
         const newTasks = tasks.map( task => (
             task.id === taskId ? {...task, done: !task.done} : task
         ));
@@ -97,24 +102,38 @@ function ToDo(props) {
             
             { tasks.length === 0 && <p>No tasks.</p>}
 
-            { tasks.map( (item, i) =>
-                <TodoItem
-                    key={i}
-                    id={item.id}
-                    task={item.task}
-                    done={item.done}
-                    onEdit={item.onEdit}
-                    ref={item.onEdit ? refTodoItem : null}
-                    validated={false}
-                    toogleBehavior={toogleTaskDone}
-                    removeBehavior={removeTaskById}
-                    editBehavior={editTaskById}
-                    editCancelBehavior={editCancelTaskById}
-                    updateBehavior={updateTaskById}
-                />
-            )}
+            <TodoList
+                axis="xy"
+                onSortEnd={dragDropEnd}
+                distance={20}>
+
+                { tasks.map( (item, i) =>
+                    <TodoItem
+                        key={i}
+                        id={item.id}
+                        index={i}           /* /w react-sortable-hoc */
+                        disabled={onEdit}   /* /w react-sortable-hoc */
+                        task={item.task}
+                        done={item.done}
+                        onEdit={item.onEdit}
+                        /* ref={item.onEdit ? refTodoItem : null} */
+                        validated={false}
+                        toogleBehavior={toogleTaskDone}
+                        removeBehavior={removeTaskById}
+                        editBehavior={editTaskById}
+                        editCancelBehavior={editCancelTaskById}
+                        updateBehavior={updateTaskById}
+                    />
+                )}
+            </TodoList>
         </todo>
     ) // return
+
+    function dragDropEnd({oldIndex, newIndex}) {
+        const newTasks = arrayMove(tasks, oldIndex, newIndex);
+        
+        setTasks(newTasks);
+    };
 } // end of function
 
 export default ToDo;
