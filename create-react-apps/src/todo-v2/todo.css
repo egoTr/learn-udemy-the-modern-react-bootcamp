@@ -110,7 +110,7 @@ todo-item[onedit="true"], todo-item:hover {
     border-radius: 5px;
 }
 
-todo-item[onedit="false"]:hover::before {
+todo-item[onedit="false"][ondrag="false"]:hover::before {
     display: block;
     position: absolute; top: calc(50% - 12px); /* 12px = height/2 */
     left: calc(-10px - 12px); /* -10px = parent's paddingLeft     */

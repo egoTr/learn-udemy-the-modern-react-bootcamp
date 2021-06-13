@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 
 const TodoItem = SortableElement( (props) => {  
-    const { id, onEdit, done, task, toogleBehavior, editBehavior, editCancelBehavior, updateBehavior, removeBehavior } = props;
+    const { id, onEdit, onDrag, done, task, toogleBehavior, editBehavior, editCancelBehavior, updateBehavior, removeBehavior } = props;
     
     const [taskThis, setTask] = useState(task);
     const refInput = useRef();
@@ -35,7 +35,7 @@ const TodoItem = SortableElement( (props) => {
     } // updateTask
 
     return (
-        <todo-item onedit={`${onEdit}`} title="Drag-drop to re-order">
+        <todo-item onedit={`${onEdit}`} ondrag={`${onDrag}`} title="Drag-drop to re-order">
             {!onEdit && 
             <div>
                 <todo-text

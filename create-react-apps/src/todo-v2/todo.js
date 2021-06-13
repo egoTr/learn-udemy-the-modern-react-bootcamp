@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import arrayMove from 'array-move';
+import React, { useEffect } from 'react';
+import useAppState from './hooks/useAppState';
 
 import './todo.css';
 import TodoForm from './todo-form';
@@ -11,77 +11,15 @@ const CONST_TODOS_LOCAL_STORAGE_NAME = "todos.localStorage";
 document.title = "React Challenge/> Todo - v2";
 
 function ToDo() {
-    const [initialized, setInit] = useState(false);
-    const [onEdit, setOnEdit] = useState(false);
-    const [tasks, setTasks] = useState([]);
+    const cachedData = localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME);
+    const initTasks = cachedData ? JSON.parse(cachedData) : [];
+
+    const [app, addTodo, toogleTaskDone, removeTaskById, editTaskById, editCancelTaskById, updateTaskById, dragDropStart, dragDropEnd]
+        = useAppState({ onEdit: false, onDrag: false, tasks: initTasks });
 
     useEffect( () => {
-        if ( !initialized && localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) ) {
-            const tasks = JSON.parse( localStorage.getItem(CONST_TODOS_LOCAL_STORAGE_NAME) );
-
-            setTasks(tasks);
-        } // if
-        setInit(true);
-    }, [initialized]);
-
-    useEffect( () => {
-        if (initialized)
-            localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(tasks) );
-    }, [initialized, tasks]);
-
-    function addTodo(task) {
-        const newTask = {task, id: Date.now(), done: false, onEdit: false};
-
-        setTasks([...tasks, newTask]);
-    } // end of method
-
-    function toogleTaskDone(taskId) {
-        if (onEdit)
-            return;
-        
-        const newTasks = tasks.map( task => (
-            task.id === taskId ? {...task, done: !task.done} : task
-        ));
-
-        setTasks(newTasks);
-    } // removeTaskById
-
-    function removeTaskById(taskId)  {
-        if (onEdit)
-            return;
-
-        setTasks( tasks.filter(task => task.id !== taskId) );
-    } // removeTaskById
-
-    function editTaskById(taskId) {
-        if (onEdit)
-            return;
-        
-        const newTasks = tasks.map( task => (
-            task.id === taskId ? {...task, onEdit: true} : task
-        ));
-
-        setOnEdit(true);
-        setTasks(newTasks);
-    } // editTaskById
-
-    function editCancelTaskById(taskId)  {
-        const newTasks = tasks.map( task => (
-            task.id === taskId ? {...task, onEdit: false} : task
-        ));
-
-        setOnEdit(false);
-        setTasks(newTasks);
-    } // editCancelTaskById
-
-    function updateTaskById(taskId, taskText) {
-        const newTasks = tasks.map( task => (
-            task.id === taskId ? {...task, task: taskText, onEdit: false} : task
-        ));
-
-        setOnEdit(false);
-        setTasks(newTasks);
-    } // updateTaskById
+        localStorage.setItem( CONST_TODOS_LOCAL_STORAGE_NAME, JSON.stringify(app.tasks) );
+    }, [app.tasks]);
 
     return (
         <todo is="react">
@@ -90,23 +28,27 @@ function ToDo() {
 
             <hr/>
             
-            { tasks.length === 0 && <p>No tasks.</p>}
+            { app.tasks.length === 0 && <p>No tasks.</p>}
 
             <TodoList
                 axis="xy"
+                onSortMove={dragDropStart}
                 onSortEnd={dragDropEnd}
                 distance={20}>
 
-                { tasks.map( (item, i) =>
+                { app.tasks.map( (item, i) =>
                     <TodoItem
-                        key={item.id}       /* For re-rendering the children :(((( */
+                        key={item.id}           /* For re-rendering the children :(((( */
                         id={item.id}
-                        index={i}           /* w/ react-sortable-hoc */
-                        disabled={onEdit}   /* w/ react-sortable-hoc */
+
+                        index={i}               /* w/ react-sortable-hoc */
+                        disabled={app.onEdit}   /* w/ react-sortable-hoc */
+                        onDrag={app.onDrag}     /* w/ react-sortable-hoc */
+                        
                         task={item.task}
                         done={item.done}
                         onEdit={item.onEdit}
-                        validated={false}
+                        
                         toogleBehavior={toogleTaskDone}
                         removeBehavior={removeTaskById}
                         editBehavior={editTaskById}
@@ -116,13 +58,7 @@ function ToDo() {
                 )}
             </TodoList>
         </todo>
-    ) // return
-
-    function dragDropEnd({oldIndex, newIndex}) {
-        const newTasks = arrayMove(tasks, oldIndex, newIndex);
-        
-        setTasks(newTasks);
-    };
+    ) // return    
 } // end of function
 
 export default ToDo;
