@@ -36,7 +36,7 @@ const AppState = (initial) => {
             task.id === taskId ? {...task, onEdit: true} : task
         ));
 
-        setApp({ onEdit: true, tasks: newTasks });
+        setApp({ ...app, onEdit: true, tasks: newTasks });
     } // editTaskById
 
     function editCancelTaskById(taskId)  {
@@ -44,7 +44,7 @@ const AppState = (initial) => {
             task.id === taskId ? {...task, onEdit: false} : task
         ));
 
-        setApp({ onEdit: false, tasks: newTasks });
+        setApp({ ...app, onEdit: false, tasks: newTasks });
     } // editCancelTaskById
 
     function updateTaskById(taskId, taskText) {
@@ -52,7 +52,7 @@ const AppState = (initial) => {
             task.id === taskId ? {...task, task: taskText, onEdit: false} : task
         ));
 
-        setApp({ onEdit: false, tasks: newTasks });
+        setApp({ ...app, onEdit: false, tasks: newTasks });
     } // updateTaskById
 
     function dragDropStart() {        
