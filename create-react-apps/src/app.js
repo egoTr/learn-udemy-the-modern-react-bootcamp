@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Todo from './todo-v3/todo';
+import Todo from './todo-v4/todo';
 
 class App extends Component {
   static defaultProps = {
